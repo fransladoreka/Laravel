@@ -304,6 +304,8 @@
                         // console.log("Form ID:", formId);
 
                         // Ambil data form
+                        let el = document.querySelector("#form-edit");
+                        console.log(el);
                         const formData = new FormData(this);
 
                         fetch("{{ url('akun') }}/" + currentId, {
