@@ -73,12 +73,10 @@ class AkunAkuntansiController extends Controller
      */
     public function tree()
     {
-        echo "Controller dipanggil!";
-        exit;
-        // $akun = AkunAkuntansi::whereNull('id_parent')
-        //     ->with('children')
-        //     ->get();
-        // return view('akun.partials.tree', compact('akun'));
+        $akun = AkunAkuntansi::whereNull('id_parent')
+            ->with('children')
+            ->get();
+        return view('akun.partials.tree', compact('akun'));
     }
 
     /**
