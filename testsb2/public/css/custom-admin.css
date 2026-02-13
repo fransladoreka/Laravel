@@ -1,0 +1,32 @@
+/* ===============================
+   SIDEBAR SEARCH WITH ICON
+=================================*/
+
+.sidebar-search {
+    padding-left: 30px; /* beri ruang untuk icon */
+    border-radius: 6px;
+    font-size: 12px;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+}
+
+.sidebar-search:focus {
+    background: #ffffff;
+    border-color: #2563eb;
+    box-shadow: none;
+}
+
+/* icon di dalam input */
+.sidebar-search-icon {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+.sidebar.toggled .navbar-search {
+    display: none !important;
+}
