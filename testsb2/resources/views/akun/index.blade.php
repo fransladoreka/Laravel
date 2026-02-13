@@ -1,6 +1,5 @@
 @extends('layoutes.main')
 @section('head')
-<meta name="csrf-token" content="{{ csrf_token() }}">
 <style>
     ul {
         list-style: none;
@@ -66,7 +65,9 @@
                 @include('akun.partials.node', ['account' => $account])
                 @endforeach
             </ul> -->
-            @include('akun.partials.tree')
+            <div id="tree-container">
+                @include('akun.partials.tree')
+            </div>
         </div>
         <!-- Kolom Kanan -->
         <div class="col-md-8" id="right-panel">
@@ -304,12 +305,14 @@
                         // console.log("Form ID:", formId);
 
                         // Ambil data form
-                        let el = document.querySelector("#form-edit");
-                        console.log(el);
-                        const formData = new FormData(this);
+                        // let el = document.querySelector("#form-edit");
+                        // console.log(el);
+                        let formData = new FormData(e.target);
+                        console.log("DATA: ", formData);
+                        formData.append("_method", "PUT");
 
                         fetch("{{ url('akun') }}/" + currentId, {
-                                method: "PUT",
+                                method: "POST",
                                 headers: {
                                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
                                 },
@@ -402,9 +405,33 @@
         fetch("{{ route('akun.tree') }}")
             .then(response => response.text())
             .then(html => {
+                console.log("reloadTree",html);
                 document.getElementById("tree-container").innerHTML = html;
+            })
+            .catch(error => {
+                console.error("Error:", error);
             });
     }
+
+    // function reloadTree() {
+    //     fetch("{{ route('akun.tree') }}", {
+    //             method: "GET",
+    //             headers: {
+    //                 "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+    //             }
+    //         })
+    //         .then(response => response.text())
+    //         .then(data => {
+    //             console.log("reloadTree", data);
+    //         })
+    //         .then(html => {
+    //             document.getElementById("tree-container").innerHTML = html;
+    //         })
+    //         .catch(error => {
+    //             console.error("Error:", error);
+    //         });
+    // }
+
 
 
     // document.addEventListener("DOMContentLoaded", function() {

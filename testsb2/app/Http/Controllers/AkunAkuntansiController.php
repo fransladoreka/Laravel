@@ -59,7 +59,7 @@ class AkunAkuntansiController extends Controller
      * Update the specified resource in storage.
      */
     // public function update(Request $request, string $id)
-    public function update(Request $request,string $id)
+    public function update(Request $request, string $id)
     {
         $akun = AkunAkuntansi::find($request->id);
         $akun->akun = $request->akun;
@@ -71,12 +71,14 @@ class AkunAkuntansiController extends Controller
     /**
      * Refresh folder
      */
-    public function tree(string $id)
+    public function tree()
     {
-        $akun = AkunAkuntansi::whereNull('id_parent')
-            ->with('children')
-            ->get();
-        return view('akun.partials.tree', compact('akun'));
+        echo "Controller dipanggil!";
+        exit;
+        // $akun = AkunAkuntansi::whereNull('id_parent')
+        //     ->with('children')
+        //     ->get();
+        // return view('akun.partials.tree', compact('akun'));
     }
 
     /**
