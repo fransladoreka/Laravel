@@ -395,52 +395,6 @@
                             .catch(err => console.error(err));
 
                     });
-                    // document.getElementById('form-edit').addEventListener("submit", function(e) {
-                    //     console.log("EVENT TARGET: ",e.target);
-                    //     console.log("this: ",this);
-                    //     console.log("TYPE: ",e.target.tagName);
-                    //     let form = e.target.closest("form");
-                    //     if (!form) return;
-                    //     if (e.target.id === "form-edit") {
-                    //         e.preventDefault();
-
-                    //         let formData = new FormData(e.target);
-
-                    //         fetch("{{ url('akun') }}/" + currentId, {
-                    //                 method: "PUT",
-                    //                 headers: {
-                    //                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-                    //                 },
-                    //                 body: formData
-                    //             })
-                    //             .then(res => res.json())
-                    //             .then(data => {
-                    //                 reloadTree();
-                    //                 rightPanel.innerHTML = "<div class='p-4 text-success'>Berhasil diupdate</div>";
-                    //             });
-                    //     }
-
-                    //     if (e.target.id === "form-add") {
-
-                    //         e.preventDefault();
-
-                    //         let formData = new FormData(e.target);
-
-                    //         fetch("{{ url('akun') }}", {
-                    //                 method: "POST",
-                    //                 headers: {
-                    //                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-                    //                 },
-                    //                 body: formData
-                    //             })
-                    //             .then(res => res.json())
-                    //             .then(data => {
-                    //                 reloadTree();
-                    //                 rightPanel.innerHTML = "<div class='p-4 text-success'>Berhasil ditambahkan</div>";
-                    //             });
-                    //     }
-
-                    // });
                 }
 
                 if (action === "delete") {
@@ -498,72 +452,5 @@
     function closeCard() {
         rightPanel.innerHTML = "<div class='p-4 text-muted text-center'>Pilih menu edit/tambah untuk menampilkan form</div>";
     }
-    // function reloadTree() {
-    //     fetch("{{ route('akun.tree') }}", {
-    //             method: "GET",
-    //             headers: {
-    //                 "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-    //             }
-    //         })
-    //         .then(response => response.text())
-    //         .then(data => {
-    //             console.log("reloadTree", data);
-    //         })
-    //         .then(html => {
-    //             document.getElementById("tree-container").innerHTML = html;
-    //         })
-    //         .catch(error => {
-    //             console.error("Error:", error);
-    //         });
-    // }
-
-
-
-    // document.addEventListener("DOMContentLoaded", function() {
-    //     document.addEventListener("submit", function(e) {
-    //         let form=e.target.closest("form");
-    //         if(!form) return;
-    //         alert(form.id)
-    //         if (e.target.id === "form-edit") {
-    //             e.preventDefault();
-
-    //             let formData = new FormData(e.target);
-
-    //             fetch("{{ url('akun') }}/" + currentId, {
-    //                     method: "PUT",
-    //                     headers: {
-    //                         "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-    //                     },
-    //                     body: formData
-    //                 })
-    //                 .then(res => res.json())
-    //                 .then(data => {
-    //                     reloadTree();
-    //                     rightPanel.innerHTML = "<div class='p-4 text-success'>Berhasil diupdate</div>";
-    //                 });
-    //         }
-
-    //         if (e.target.id === "form-add") {
-
-    //             e.preventDefault();
-
-    //             let formData = new FormData(e.target);
-
-    //             fetch("{{ url('akun') }}", {
-    //                     method: "POST",
-    //                     headers: {
-    //                         "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-    //                     },
-    //                     body: formData
-    //                 })
-    //                 .then(res => res.json())
-    //                 .then(data => {
-    //                     reloadTree();
-    //                     rightPanel.innerHTML = "<div class='p-4 text-success'>Berhasil ditambahkan</div>";
-    //                 });
-    //         }
-
-    //     });
-    // });
 </script>
 @endsection
