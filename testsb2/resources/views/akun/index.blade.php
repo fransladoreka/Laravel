@@ -101,6 +101,7 @@
 </div>
 
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     // document.addEventListener("DOMContentLoaded", function() {
@@ -380,7 +381,49 @@
                 }
 
                 if (action === "delete") {
-                    alert("Hapus ID: " + currentId);
+                    fetch("{{ url('akun/check') }}/" + currentId)
+                        .then(res => res.json())
+                        .then(data => {
+                            let title = "Hapus Akun?";
+                            let text = "Data yang dihapus tidak dapat dikembalikan.";
+                            let icon = "warning";
+                            if (data.hasChildren) {
+                                title = "Akun memiliki sub akun!";
+                                text = "Semua sub akun akan ikut terhapus.\nApakah anda yakin?";
+                                icon = "error";
+                            }
+                            Swal.fire({
+                                title: title,
+                                text: text,
+                                icon: icon,
+                                showCancelButton: true,
+                                confirmButtonColor: "#d33",
+                                cancelButtonColor: "#6c757d",
+                                confirmButtonText: "Ya, hapus!",
+                                cancelButtonText: "Batal"
+                            }).then(result => {
+                                if (!result.isConfirmed) return;
+                                fetch("{{ url('akun') }}/" + currentId, {
+                                        method: "DELETE",
+                                        headers: {
+                                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                                            "accept": "application/json"
+                                        }
+                                    })
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: "Berhasil!",
+                                            text: "Akun berhasil dihapus",
+                                            timer: 1500,
+                                            showCnfirmButton: false
+                                        });
+                                        reloadTree();
+                                        rightPanel.innerHTML = "<div class='p-4 text-muted text-center'>Pilih menu edit/tambah untuk menampilkan form</div>";
+                                    });
+                            });
+                        });
                 }
 
                 menu.style.display = "none";

@@ -16,10 +16,18 @@ class AkunAkuntansi extends Model
     ];
     public function children()
     {
-        return $this->hasMany(AkunAkuntansi::class,'id_parent');
+        return $this->hasMany(AkunAkuntansi::class, 'id_parent')
+            ->with('children');
     }
     public function parent()
     {
-        return $this->belongsTo(AkunAkuntansi::class,'id_parent');
+        return $this->belongsTo(AkunAkuntansi::class, 'id_parent');
+    }
+    public function deleteRecursive()
+    {
+        foreach ($this->children as $child) {
+            $child->deleteRecursive();
+        }
+        $this->delete();
     }
 }

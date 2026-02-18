@@ -152,6 +152,17 @@ class AkunAkuntansiController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $akun = AkunAkuntansi::with('children')->findOrFail($id);
+        $akun->deleteRecursive();
+        return response()->json(["success" => true]);
+    }
+
+    /**
+     * Check akun has child.
+     */
+    public function checkChildren(string $id)
+    {
+        $akun = AkunAkuntansi::withCount('children')->findOrFail($id);
+        return response()->json(['hasChildren' => $akun->children_count > 0]);
     }
 }
