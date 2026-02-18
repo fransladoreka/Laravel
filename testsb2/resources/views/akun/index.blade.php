@@ -222,50 +222,7 @@
                     </div>
                 </div>
             `;
-                    // document.addEventListener("submit", function(e) {
-                    //     let form = e.target.closest("form");
-                    //     if (!form) return;
-                    //     alert(form.id)
-                    //     if (e.target.id === "form-edit") {
-                    //         e.preventDefault();
-
-                    //         let formData = new FormData(e.target);
-
-                    //         fetch("{{ url('akun') }}/" + currentId, {
-                    //                 method: "PUT",
-                    //                 headers: {
-                    //                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-                    //                 },
-                    //                 body: formData
-                    //             })
-                    //             .then(res => res.json())
-                    //             .then(data => {
-                    //                 reloadTree();
-                    //                 rightPanel.innerHTML = "<div class='p-4 text-success'>Berhasil diupdate</div>";
-                    //             });
-                    //     }
-
-                    //     if (e.target.id === "form-add") {
-
-                    //         e.preventDefault();
-
-                    //         let formData = new FormData(e.target);
-
-                    //         fetch("{{ url('akun') }}", {
-                    //                 method: "POST",
-                    //                 headers: {
-                    //                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-                    //                 },
-                    //                 body: formData
-                    //             })
-                    //             .then(res => res.json())
-                    //             .then(data => {
-                    //                 reloadTree();
-                    //                 rightPanel.innerHTML = "<div class='p-4 text-success'>Berhasil ditambahkan</div>";
-                    //             });
-                    //     }
-
-                    // });
+                    
                 }
 
                 if (action === "edit") {
