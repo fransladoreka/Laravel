@@ -30,6 +30,40 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
 
+        <!-- GLOBAL TOAST CONTAINER -->
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 1055">
+
+            <!-- Success Toast -->
+            <div id="toast-success"
+                class="toast align-items-center text-white bg-success border-0"
+                role="alert">
+                <div class="d-flex">
+                    <div class="toast-body" id="toast-success-body">
+                        Sukses!
+                    </div>
+                    <button type="button"
+                        class="btn-close btn-close-white me-2 m-auto"
+                        data-bs-dismiss="toast"></button>
+                </div>
+            </div>
+
+            <!-- Error Toast -->
+            <div id="toast-error"
+                class="toast align-items-center text-white bg-danger border-0"
+                role="alert">
+                <div class="d-flex">
+                    <div class="toast-body" id="toast-error-body">
+                        Error!
+                    </div>
+                    <button type="button"
+                        class="btn-close btn-close-white me-2 m-auto"
+                        data-bs-dismiss="toast"></button>
+                </div>
+            </div>
+
+        </div>
+
+
         <!-- Sidebar -->
         <ul class="navbar-nav bg-white sidebar sidebar-light accordion" id="accordionSidebar">
 
@@ -366,6 +400,27 @@
 
         // Jalankan saat pertama load
         updateIcon();
+
+        function showToast(type, message, delay = 3000) {
+
+            let toastEl;
+            let bodyEl;
+
+            if (type === 'success') {
+                toastEl = document.getElementById('toast-success');
+                bodyEl = document.getElementById('toast-success-body');
+            } else {
+                toastEl = document.getElementById('toast-error');
+                bodyEl = document.getElementById('toast-error-body');
+            }
+
+            bodyEl.innerText = message;
+
+            let toast = new bootstrap.Toast(toastEl, {
+                delay: delay
+            });
+            toast.show();
+        }
     </script>
 
 </body>

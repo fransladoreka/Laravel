@@ -57,12 +57,15 @@ class AkunAkuntansiController extends Controller
         }
         $akun = new AkunAkuntansi();
         $akun->akun = $request->akun;
-        $akun->kode = $request->kode;        
+        $akun->kode = $request->kode;
         //$akun->id_parent = $request->id_parent;
         // Cek id_parent, jika kosong beri null
         $akun->id_parent = !empty($request->id_parent) ? $request->id_parent : null;
         $akun->save();
-        return response()->json(['success' => true]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Akun berhasil ditambahkan!'
+        ]);
     }
 
     /**
