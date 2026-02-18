@@ -270,46 +270,91 @@
 
                 if (action === "edit") {
                     rightPanel.innerHTML = `
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        Edit Akun
-                    </div>
-                    <div class="card-body">
-                        <form id="form-edit" novalidate>
-                            <input type="hidden" name="id" value="${currentId}">
-                            
-                            <div class="mb-3">
-                                <label class="form-label">Nama Akun</label>
-                                <input type="text" name="akun" class="form-control" value="${nama}">
-                            </div>
+                <div class="container-fluid p-0">
+    <div class="card shadow-sm border-0 rounded-0">
 
-                            <div class="mb-3">
-                                <label class="form-label">Kode Akun</label>
-                                <input type="text" name="kode" class="form-control" value="${kode}">
-                            </div>
+        <div class="card-header text-white rounded-top-4 d-flex justify-content-between align-items-center"
+             style="background: linear-gradient(135deg, #4e73df, #224abe);">
+            <h5 class="mb-0 fw-semibold d-flex align-items-center">
+                <i class="fas fa-edit me-2"></i> Edit Akun
+            </h5>
 
-                            <button type="submit" class="btn btn-success">
-                                Simpan
-                            </button>
-                        </form>
+            <!-- Tombol Close -->
+            <button type="button"
+                    class="btn btn-sm text-white"
+                    style="background: rgba(0,0,0,0.2); border-radius:50%; padding:0.25rem 0.5rem;"
+                    onclick="closeCard()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="card-body p-4">
+            <form id="form-edit" novalidate>
+                <input type="hidden" name="id" value="${currentId}">
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold text-muted">
+                        <i class="fas fa-hashtag me-1 text-primary"></i> Nama Akun
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">
+                            <i class="fas fa-file-invoice text-primary"></i>
+                        </span>
+                        <input type="text"
+                               name="akun"
+                               class="form-control form-control-lg"
+                               placeholder="Masukkan nama akun"
+                               value="${nama}">
                     </div>
                 </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold text-muted">
+                        <i class="fas fa-hashtag me-1 text-success"></i> Kode Akun
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">
+                            <i class="fas fa-key text-success"></i>
+                        </span>
+                        <input type="text"
+                               name="kode"
+                               class="form-control form-control-lg"
+                               placeholder="Masukkan kode akun"
+                               value="${kode}">
+                    </div>
+                </div>
+
+                <div class="text-right mt-3">
+                    <button type="button"
+                            class="btn btn-danger btn-lg px-4"
+                            onclick="clearFormEdit()">
+                        <i class="fas fa-times me-2"></i>
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="btn btn-success btn-lg px-4">
+                        <i class="fas fa-save me-2"></i>
+                        Simpan Perubahan
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
             `;
 
                     const form = document.getElementById("form-edit");
                     form.addEventListener("submit", function(e) {
                         e.preventDefault(); // mencegah reload halaman
-                        //alert(this.id);
-                        // Ambil ID form
-                        // const formId = this.id;
-                        // console.log("Form ID:", formId);
 
-                        // Ambil data form
-                        // let el = document.querySelector("#form-edit");
-                        // console.log(el);
                         let formData = new FormData(e.target);
                         console.log("DATA: ", formData);
                         formData.append("_method", "PUT");
+
+                        // Hapus error lama
+                        form.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
+                        form.querySelectorAll(".invalid-feedback").forEach(el => el.remove());
 
                         fetch("{{ url('akun') }}/" + currentId, {
                                 method: "POST",
@@ -318,11 +363,36 @@
                                 },
                                 body: formData
                             })
-                            .then(res => res.json())
+                            // .then(res => res.json())
+                            .then(async res => {
+                                if (res.status === 422) {
+                                    // Validasi gagal
+                                    let data = await res.json();
+                                    //console.log(data.errors);
+                                    let errors = data.errors;
+
+                                    // Tampilkan error di bawah input
+                                    for (const key in errors) {
+                                        let input = form.querySelector(`[name="${key}"]`);
+                                        if (input) {
+                                            input.classList.add("is-invalid");
+                                            let div = document.createElement("div");
+                                            div.className = "invalid-feedback";
+                                            div.innerText = errors[key][0];
+                                            input.after(div);
+                                        }
+                                    }
+                                } else {
+                                    return res.json();
+                                }
+                            })
                             .then(data => {
-                                reloadTree();
-                                rightPanel.innerHTML = "<div class='p-4 text-success'>Berhasil diupdate</div>";
-                            });
+                                if (data && data.success) {
+                                    reloadTree();
+                                    rightPanel.innerHTML = "<div class='p-4 text-success'>Berhasil diupdate</div>";
+                                }
+                            })
+                            .catch(err => console.error(err));
 
                     });
                     // document.getElementById('form-edit').addEventListener("submit", function(e) {
@@ -405,7 +475,7 @@
         fetch("{{ route('akun.tree') }}")
             .then(response => response.text())
             .then(html => {
-                console.log("reloadTree",html);
+                //console.log("reloadTree", html);
                 document.getElementById("tree-container").innerHTML = html;
             })
             .catch(error => {
@@ -413,6 +483,21 @@
             });
     }
 
+
+    function clearFormEdit() {
+        const form = document.getElementById("form-edit");
+
+        // Ambil semua input kecuali yang type hidden
+        const inputs = form.querySelectorAll("input:not([type='hidden'])");
+
+        inputs.forEach(input => {
+            input.value = "";
+        });
+    }
+
+    function closeCard() {
+        rightPanel.innerHTML = "<div class='p-4 text-muted text-center'>Pilih menu edit/tambah untuk menampilkan form</div>";
+    }
     // function reloadTree() {
     //     fetch("{{ route('akun.tree') }}", {
     //             method: "GET",

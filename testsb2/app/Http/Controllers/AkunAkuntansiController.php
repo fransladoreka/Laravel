@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\AkunAkuntansi;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AkunAkuntansiController extends Controller
 {
@@ -61,6 +63,45 @@ class AkunAkuntansiController extends Controller
     // public function update(Request $request, string $id)
     public function update(Request $request, string $id)
     {
+        // $validated = $request->validate([
+        //     'id' => 'required|exists:akun_akuntansis,id',
+        //     'akun' => 'required|string|min:3|max:100',
+        //     'kode' => [
+        //         'required',
+        //         'string',
+        //         'max:20',
+        //         Rule::unique('akun_akuntansis')->ignore($request->id)
+        //     ],
+        // ], [
+        //     'akun.required' => 'Nama akun wajib diisi.',
+        //     'akun.min' => 'Nama akun minimal 3 karakter.',
+        //     'kode.required' => 'Kode akun wajib diisi.',
+        //     'kode.unique' => 'Kode akun sudah digunakan.',
+        // ]);
+        // Buat validator manual
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:akun_akuntansis,id',
+            'akun' => 'required|string|min:3|max:100',
+            'kode' => [
+                'required',
+                'string',
+                'max:20',
+                Rule::unique('akun_akuntansis')->ignore($request->id)
+            ],
+        ], [
+            'akun.required' => 'Nama akun wajib diisi.',
+            'akun.min' => 'Nama akun minimal 3 karakter.',
+            'kode.required' => 'Kode akun wajib diisi.',
+            'kode.unique' => 'Kode akun sudah digunakan.',
+        ]);
+
+        // Cek validasi
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
         $akun = AkunAkuntansi::find($request->id);
         $akun->akun = $request->akun;
         $akun->kode = $request->kode;
