@@ -93,7 +93,7 @@
     </div>
 
 
-    <!-- <input type="hidden" id="selected_account"> -->
+    <input type="hidden" id="selected_account">
     <!-- <input id="selected_account"> -->
 </div>
 
@@ -199,30 +199,124 @@
 
                 if (action === "add") {
                     rightPanel.innerHTML = `
-                <div class="card shadow-sm">
-                    <div class="card-header bg-success text-white">
-                        Tambah Akun
-                    </div>
-                    <div class="card-body">
+                <div class="container-fluid p-0">
+    <div class="card shadow-sm border-0 rounded-0">
+
+        <div class="card-header text-white rounded-top-4 d-flex justify-content-between align-items-center"
+             style="background: linear-gradient(135deg, #4e73df, #224abe);">
+            <h5 class="mb-0 fw-semibold d-flex align-items-center">
+                <i class="fas fa-plus me-2"></i> Tambah Akun
+            </h5>
+
+            <!-- Tombol Close -->
+            <button type="button"
+                    class="btn btn-sm text-white"
+                    style="background: rgba(0,0,0,0.2); border-radius:50%; padding:0.25rem 0.5rem;"
+                    onclick="closeCard()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+                    <div class="card-body p-4">
                         <form id="form-add">
                             <input type="hidden" name="id_parent" value="${currentId}">
+                            <div class="mb-4">
+                    <label class="form-label fw-semibold text-muted">
+                        <i class="fas fa-hashtag me-1 text-primary"></i> Nama Akun
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">
+                            <i class="fas fa-file-invoice text-primary"></i>
+                        </span>
+                        <input type="text"
+                               name="akun"
+                               class="form-control form-control-lg"
+                               placeholder="Masukkan nama akun">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-semibold text-muted">
+                        <i class="fas fa-hashtag me-1 text-success"></i> Kode Akun
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">
+                            <i class="fas fa-key text-success"></i>
+                        </span>
+                        <input type="text"
+                               name="kode"
+                               class="form-control form-control-lg"
+                               placeholder="Masukkan kode akun"
+                    </div>
+                </div>
                             
-                            <div class="mb-3">
-                                <label class="form-label">Nama Akun</label>
-                                <input type="text" name="akun" class="form-control">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Kode Akun</label>
-                                <input type="text" name="kode" class="form-control">
-                            </div>
-                            <button type="submit" class="btn btn-primary">
-                                Simpan
-                            </button>
+                            <div class="text-right mt-3">
+                    <button type="button"
+                            class="btn btn-danger btn-lg px-4"
+                            onclick="clearFormAdd()">
+                        <i class="fas fa-times me-2"></i>
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="btn btn-success btn-lg px-4">
+                        <i class="fas fa-save me-2"></i>
+                        Simpan
+                    </button>
+                </div>
                         </form>
                     </div>
                 </div>
             `;
-                    
+                    const form = document.getElementById("form-add");
+                    form.addEventListener("submit", function(e) {
+                        e.preventDefault(); // mencegah reload halaman
+
+                        let formData = new FormData(e.target);
+                        console.log("DATA: ", formData);
+                        formData.append("_method", "POST");
+
+                        // Hapus error lama
+                        form.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
+                        form.querySelectorAll(".invalid-feedback").forEach(el => el.remove());
+
+                        fetch("{{ url('akun') }}", {
+                                method: "POST",
+                                headers: {
+                                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                                },
+                                body: formData
+                            })
+                            // .then(res => res.json())
+                            .then(async res => {
+                                if (res.status === 422) {
+                                    // Validasi gagal
+                                    let data = await res.json();
+                                    //console.log(data.errors);
+                                    let errors = data.errors;
+
+                                    // Tampilkan error di bawah input
+                                    for (const key in errors) {
+                                        let input = form.querySelector(`[name="${key}"]`);
+                                        if (input) {
+                                            input.classList.add("is-invalid");
+                                            let div = document.createElement("div");
+                                            div.className = "invalid-feedback";
+                                            div.innerText = errors[key][0];
+                                            input.after(div);
+                                        }
+                                    }
+                                } else {
+                                    return res.json();
+                                }
+                            })
+                            .then(data => {
+                                if (data && data.success) {
+                                    reloadTree();
+                                    rightPanel.innerHTML = "<div class='p-4 text-success'>Berhasil ditambahkan</div>";
+                                }
+                            })
+                            .catch(err => console.error(err));
+
+                    });
+
                 }
 
                 if (action === "edit") {
@@ -386,7 +480,7 @@
         fetch("{{ route('akun.tree') }}")
             .then(response => response.text())
             .then(html => {
-                //console.log("reloadTree", html);
+                console.log("reloadTree", html);
                 document.getElementById("tree-container").innerHTML = html;
             })
             .catch(error => {
@@ -405,6 +499,18 @@
             input.value = "";
         });
     }
+
+    function clearFormAdd() {
+        const form = document.getElementById("form-add");
+
+        // Ambil semua input kecuali yang type hidden
+        const inputs = form.querySelectorAll("input:not([type='hidden'])");
+
+        inputs.forEach(input => {
+            input.value = "";
+        });
+    }
+
 
     function closeCard() {
         rightPanel.innerHTML = "<div class='p-4 text-muted text-center'>Pilih menu edit/tambah untuk menampilkan form</div>";

@@ -33,10 +33,34 @@ class AkunAkuntansiController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'akun' => 'required|string|min:3|max:100',
+            'kode' => [
+                'required',
+                'string',
+                'max:20',
+                Rule::unique('akun_akuntansis')
+            ],
+        ], [
+            'akun.required' => 'Nama akun wajib diisi.',
+            'akun.min' => 'Nama akun minimal 3 karakter.',
+            'kode.required' => 'Kode akun wajib diisi.',
+            'kode.unique' => 'Kode akun sudah digunakan.',
+        ]);
+
+        // Cek validasi
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
         $akun = new AkunAkuntansi();
         $akun->akun = $request->akun;
-        $akun->kode = $request->kode;
-        $akun->id_parent = $request->id_parent;
+        $akun->kode = $request->kode;        
+        //$akun->id_parent = $request->id_parent;
+        // Cek id_parent, jika kosong beri null
+        $akun->id_parent = !empty($request->id_parent) ? $request->id_parent : null;
         $akun->save();
         return response()->json(['success' => true]);
     }
