@@ -49,6 +49,19 @@ class DatamigranController extends Controller
             'nama_kontak_darurat' => 'required',
             'nomor_kontak_darurat' => 'required',
             'dokumen.pas_foto' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'pengalaman' => 'nullable|array',
+
+            'pengalaman.*.negara' => 'nullable|required_with:pengalaman.*.posisi,pengalaman.*.working_content,pengalaman.*.tahun_awal,pengalaman.*.tahun_akhir,pengalaman.*.alasan_keluar',
+
+            'pengalaman.*.posisi' => 'nullable|required_with:pengalaman.*.negara,pengalaman.*.working_content,pengalaman.*.tahun_awal,pengalaman.*.tahun_akhir,pengalaman.*.alasan_keluar',
+
+            'pengalaman.*.working_content' => 'nullable|required_with:pengalaman.*.negara,pengalaman.*.posisi,pengalaman.*.tahun_awal,pengalaman.*.tahun_akhir,pengalaman.*.alasan_keluar',
+
+            'pengalaman.*.tahun_awal' => 'nullable|required_with:pengalaman.*.negara,pengalaman.*.posisi,pengalaman.*.working_content,pengalaman.*.tahun_akhir,pengalaman.*.alasan_keluar',
+
+            'pengalaman.*.tahun_akhir' => 'nullable|required_with:pengalaman.*.negara,pengalaman.*.posisi,pengalaman.*.working_content,pengalaman.*.tahun_awal,pengalaman.*.alasan_keluar',
+
+            'pengalaman.*.alasan_keluar' => 'nullable|required_with:pengalaman.*.negara,pengalaman.*.posisi,pengalaman.*.working_content,pengalaman.*.tahun_awal,pengalaman.*.tahun_akhir',
         ], [
             'nama.required' => 'Nama wajib diisi.',
             'nik.required' => 'NIK wajib diisi.',
@@ -70,6 +83,12 @@ class DatamigranController extends Controller
             'dokumen.pas_foto.required' => 'Pas foto wajib diupload.',
             'dokumen.pas_foto.mimes'    => 'Format pas foto harus JPEG/JPG/PNG.',
             'dokumen.pas_foto.max'      => 'Ukuran maksimal 2MB.',
+            'pengalaman.*.negara.required_with' => 'Semua field pengalaman kerja wajib diisi jika salah satu diisi.',
+            'pengalaman.*.posisi.required_with' => 'Semua field pengalaman kerja wajib diisi jika salah satu diisi.',
+            'pengalaman.*.working_content.required_with' => 'Semua field pengalaman kerja wajib diisi jika salah satu diisi.',
+            'pengalaman.*.tahun_awal.required_with' => 'Semua field pengalaman kerja wajib diisi jika salah satu diisi.',
+            'pengalaman.*.tahun_akhir.required_with' => 'Semua field pengalaman kerja wajib diisi jika salah satu diisi.',
+            'pengalaman.*.alasan_keluar.required_with' => 'Semua field pengalaman kerja wajib diisi jika salah satu diisi.',
         ]);
         // Cek validasi
         if ($validator->fails()) {

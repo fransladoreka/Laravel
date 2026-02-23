@@ -207,7 +207,8 @@
                     <div class="col-lg-6 d-flex flex-column">
 
                         <!-- <div class="flex-grow-1 overflow-auto pe-3"> -->
-                        <div style="height: calc(215vh); overflow-y:auto; padding-right:15px;">
+                        <!-- <div style="height: calc(215vh); overflow-y:auto; padding-right:15px;"> -->
+                        <div style="height: 1500px; overflow-y:auto; padding-right:15px;">
 
                             <h6 class="fw-semibold border-bottom pb-2 mb-3">Biodata</h6>
 
@@ -474,7 +475,8 @@
 
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <h6 class="fw-semibold mb-0">Data Pengalaman Kerja</h6>
-                        <button type="button" class="btn btn-outline-primary btn-sm">
+                        <button type="button" class="btn btn-outline-primary btn-sm"
+                            id="btnTambahPengalaman">
                             + Tambah Pengalaman
                         </button>
                     </div>
@@ -493,8 +495,8 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
+                            <tbody id="tablePengalamanBody">
+                                <!-- <tr>
                                     <td>1</td>
                                     <td><input type="text" name="negara"
                                             class="form-control form-control-sm"></td>
@@ -509,7 +511,7 @@
                                     <td><input type="text" name="alasan_keluar"
                                             class="form-control form-control-sm"></td>
                                     <td><button class="btn btn-danger btn-sm">Hapus</button></td>
-                                </tr>
+                                </tr> -->
                             </tbody>
                         </table>
                     </div>
@@ -652,6 +654,68 @@
                 alert('Terjadi kesalahan sistem');
                 console.log(error);
             });
+
+    });
+
+    //Routine tambah baris pengalaman
+    let pengalamanIndex = 0;
+
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const btnTambah = document.getElementById("btnTambahPengalaman");
+        const tbody = document.getElementById("tablePengalamanBody");
+
+        // Auto tambah 1 baris saat load
+        tambahRow();
+
+        btnTambah.addEventListener("click", function() {
+            tambahRow();
+        });
+
+        tbody.addEventListener("click", function(e) {
+            if (e.target.classList.contains("btn-hapus")) {
+
+                const rows = tbody.querySelectorAll("tr");
+
+                // 🔥 CEK JUMLAH ROW
+                if (rows.length <= 1) {
+                    alert("Minimal harus ada 1 pengalaman kerja.");
+                    return;
+                }
+
+                e.target.closest("tr").remove();
+                updateNomor();
+            }
+        });
+
+        function tambahRow() {
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+            <td class="no"></td>
+            <td><input type="text" name="pengalaman[${pengalamanIndex}][negara]" class="form-control form-control-sm"></td>
+            <td><input type="text" name="pengalaman[${pengalamanIndex}][posisi]" class="form-control form-control-sm"></td>
+            <td><input type="text" name="pengalaman[${pengalamanIndex}][working_content]" class="form-control form-control-sm"></td>
+            <td><input type="number" name="pengalaman[${pengalamanIndex}][tahun_awal]" class="form-control form-control-sm"></td>
+            <td><input type="number" name="pengalaman[${pengalamanIndex}][tahun_akhir]" class="form-control form-control-sm"></td>
+            <td><input type="text" name="pengalaman[${pengalamanIndex}][alasan_keluar]" class="form-control form-control-sm"></td>
+            <td>
+                <button type="button" class="btn btn-danger btn-sm btn-hapus">Hapus</button>
+            </td>
+        `;
+
+            tbody.appendChild(row);
+
+            pengalamanIndex++;
+            updateNomor();
+        }
+
+        function updateNomor() {
+            const rows = tbody.querySelectorAll("tr");
+            rows.forEach((row, index) => {
+                row.querySelector(".no").innerText = index + 1;
+            });
+        }
 
     });
 </script>
