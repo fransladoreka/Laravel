@@ -7,12 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Dashboard - SB Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <link href="css/custom-admin.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    @stack('styles')
 </head>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -50,6 +52,38 @@
 </script>
 
 <body class="sb-nav-fixed">
+    <!-- GLOBAL TOAST CONTAINER -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1055">
+
+        <!-- Success Toast -->
+        <div id="toast-success"
+            class="toast align-items-center text-white bg-success border-0"
+            role="alert">
+            <div class="d-flex">
+                <div class="toast-body" id="toast-success-body">
+                    Sukses!
+                </div>
+                <button type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+
+        <!-- Error Toast -->
+        <div id="toast-error"
+            class="toast align-items-center text-white bg-danger border-0"
+            role="alert">
+            <div class="d-flex">
+                <div class="toast-body" id="toast-error-body">
+                    Error!
+                </div>
+                <button type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+
+    </div>
     <nav class="sb-topnav navbar navbar-expand navbar-light">
         <!-- Navbar Brand-->
         <a class="navbar-brand ps-3" href="index.html">Start Bootstrap</a>
@@ -86,8 +120,8 @@
                             <div class="position-relative">
                                 <i class="fas fa-search sidebar-search-icon"></i>
                                 <input type="text" id="menuSearch"
-                                class="form-control form-control-sm sidebar-search"
-                                placeholder="Search menu...">
+                                    class="form-control form-control-sm sidebar-search"
+                                    placeholder="Search menu...">
                             </div>
                         </div>
                         <div class="sb-sidenav-menu-heading">Core</div>
@@ -95,7 +129,7 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             <span>Dashboard</span>
                         </a>
-                        <!-- <div class="sb-sidenav-menu-heading">Interface</div>
+                        <div class="sb-sidenav-menu-heading">Interface</div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                             Layouts
@@ -146,7 +180,7 @@
                         <a class="nav-link" href="tables.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                             Tables
-                        </a> -->
+                        </a>
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
@@ -176,10 +210,32 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="js/scripts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="assets/demo/chart-area-demo.js"></script>
-    <script src="assets/demo/chart-bar-demo.js"></script>
+    <!-- <script src="assets/demo/chart-area-demo.js"></script>
+    <script src="assets/demo/chart-bar-demo.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
     <script src="js/datatables-simple-demo.js"></script>
+    <script>
+        function showToast(type, message, delay = 3000) {
+
+            let toastEl;
+            let bodyEl;
+
+            if (type === 'success') {
+                toastEl = document.getElementById('toast-success');
+                bodyEl = document.getElementById('toast-success-body');
+            } else {
+                toastEl = document.getElementById('toast-error');
+                bodyEl = document.getElementById('toast-error-body');
+            }
+
+            bodyEl.innerText = message;
+
+            let toast = new bootstrap.Toast(toastEl, {
+                delay: delay
+            });
+            toast.show();
+        }
+    </script>
 </body>
 
 </html>

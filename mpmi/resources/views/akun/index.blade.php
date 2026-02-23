@@ -57,7 +57,7 @@
     <h1 class="mt-4">Akun</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active">Akun</li>
-        <button type="button" class="btn btn-primary btn-sm ml-auto" onclick="addCard()">
+        <button type="button" class="btn btn-primary btn-sm ms-auto" onclick="addCard()">
             <i class="fas fa-plus me-2"></i> Tambah Akun
         </button>
     </ol>
@@ -588,7 +588,7 @@
                     }
                 })
                 .catch(err => {
-                    console.error(err);
+                    //console.error(err);
                     showToast('error', 'Terjadi kesalahan server!', 5000);
                 });
 
