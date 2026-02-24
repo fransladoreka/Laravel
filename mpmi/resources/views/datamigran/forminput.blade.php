@@ -820,7 +820,8 @@
                     }
                 }
             } else {
-                alert("Terjadi kesalahan server.");
+                let response = JSON.parse(xhr.responseText);
+                alert(response.message);
             }
         };
 

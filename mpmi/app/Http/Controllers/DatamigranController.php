@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Datamigran;
+use App\Models\PengalamanKerja;
+use App\Models\Dokumen;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class DatamigranController extends Controller
 {
@@ -97,10 +101,75 @@ class DatamigranController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
-        return response()->json([
-            'success' => true,
-            'message' => 'Data migran berhasil ditambahkan!'
-        ]);
+        DB::beginTransaction();
+        try {
+
+            $pelamar = Datamigran::create([
+                'nama' => $request->nama,
+                'nik' => $request->nik,
+                'no_passport' => $request['no_passport'] ?? null,
+                'tgl_mulai_passport' => $request['tgl_mulai_passport'] ?? null,
+                'tgl_berakhir_passport' => $request['tgl_berakhir_passport'] ?? null,
+                'gender' => $request->gender,
+                'tgl_lahir' => $request->tgl_lahir,
+                'tempat_lahir' => $request->tempat_lahir,
+                'agama' => $request->agama,
+                'provinsi' => $request->provinsi,
+                'ex_taiwan' => $request->ex_taiwan === 'true',
+                'jenis_paket' => $request->jenis_paket,
+                'paket_kerja' => 'PERTANIAN',
+                'glasses' => $request->glasses === 'true',
+                'medical' => $request->medical === 'true',
+                'call_visa' => $request->call_visa === 'true',
+                'no_telpon' => $request->no_telpon,
+                'alamat' => $request->alamat,
+                'nama_kontak_darurat' => $request->nama_kontak_darurat,
+                'nomor_kontak_darurat' => $request->nomor_kontak_darurat,
+            ]);
+
+            if ($request->pengalaman) {
+                foreach ($request->pengalaman as $item) {
+                    PengalamanKerja::create([
+                        'datamigran_id' => $pelamar->id,
+                        'negara' => $item['negara'] ?? null,
+                        'posisi' => $item['posisi'] ?? null,
+                        'working_content' => $item['working_content'] ?? null,
+                        'mulai' => $item['mulai'] ?? null,
+                        'selesai' => $item['selesai'] ?? null,
+                        'alasan_keluar' => $item['alasan_keluar'] ?? null,
+                    ]);
+                }
+            }
+
+            if ($request->dokumen) {
+                foreach ($request->dokumen as $jenis => $file) {
+                    if ($file) {
+                        $path = $file->store('dokumen', 'public');
+
+                        Dokumen::create([
+                            'datamigran_id' => $pelamar->id,
+                            'jenis' => $jenis,
+                            'file_path' => $path,
+                        ]);
+                    }
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil disimpan'
+            ]);
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -108,7 +177,12 @@ class DatamigranController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $dataMigran = DataMigran::with([
+            'dokumen',
+            'pengalaman'
+        ])->findOrFail($id);
+
+        return response()->json($dataMigran);
     }
 
     /**

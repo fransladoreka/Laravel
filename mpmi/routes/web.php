@@ -8,13 +8,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/produk', function () {
-  return view('produk.index');
+    return view('produk.index');
 });
-Route::get('/akun/tree',[AkunAkuntansiController::class,'tree'])->name('akun.tree');
-Route::get('/akun/check/{id}',[AkunAkuntansiController::class,'checkChildren'])->name('akun.check');
-Route::resource('akun',AkunAkuntansiController::class);
+Route::get('/akun/tree', [AkunAkuntansiController::class, 'tree'])->name('akun.tree');
+Route::get('/akun/check/{id}', [AkunAkuntansiController::class, 'checkChildren'])->name('akun.check');
+Route::resource('akun', AkunAkuntansiController::class);
 Route::get('/datamigran', function () {
-  return view('datamigran.forminput');
+    return view('datamigran.forminput');
 });
 Route::post('/datamigran/store', [DatamigranController::class, 'store'])
+    ->name('datamigran.store');
+Route::get('/datamigran/show/{id}', [DatamigranController::class, 'show'])
     ->name('datamigran.store');
