@@ -171,6 +171,27 @@
     .file-error {
         font-size: 12px;
     }
+
+    .progress-bar {
+        transition: width 0.3s ease;
+    }
+
+    .selected-file {
+        font-size: 13px;
+        color: #475467;
+    }
+
+    .selected-file span {
+        background: #eef2f6;
+        padding: 4px 8px;
+        border-radius: 4px;
+    }
+
+    .biodata-wrapper {
+        max-height: 100%;
+        overflow-y: auto;
+        padding-right: 15px;
+    }
 </style>
 @endpush
 
@@ -186,9 +207,27 @@
                 <h5 class="mb-0 fw-semibold">Form Pegawai Migran</h5>
                 <div>
                     <button class="btn btn-outline-danger btn-sm me-2">Kembali</button>
-                    <button class="btn btn-primary btn-sm" type="submit"
+                    <!-- <button class="btn btn-primary btn-sm"
+                        type="submit"
                         form="formDataMigran"
+                        id="btnSimpan">Simpan</button> -->
+                    <button class="btn btn-primary btn-sm"
                         id="btnSimpan">Simpan</button>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="mt-3" id="uploadProgressWrapper" style="display:none;">
+                <div class="d-flex justify-content-between mb-1">
+                    <small class="fw-semibold">Uploading...</small>
+                    <small id="uploadPercent">0%</small>
+                </div>
+                <div class="progress" style="height: 8px;">
+                    <div id="uploadProgressBar"
+                        class="progress-bar progress-bar-striped progress-bar-animated"
+                        role="progressbar"
+                        style="width: 0%">
+                    </div>
                 </div>
             </div>
 
@@ -208,6 +247,7 @@
 
                         <!-- <div class="flex-grow-1 overflow-auto pe-3"> -->
                         <!-- <div style="height: calc(215vh); overflow-y:auto; padding-right:15px;"> -->
+                        <!-- <div style="height: 1500px; overflow-y:auto; padding-right:15px;"> -->
                         <div style="height: 1500px; overflow-y:auto; padding-right:15px;">
 
                             <h6 class="fw-semibold border-bottom pb-2 mb-3">Biodata</h6>
@@ -306,12 +346,12 @@
                             <div class="mb-3">
                                 <label class="form-label">Jenis Paket <span style="color: red;">*</span></label><br>
                                 <div class="form-check form-check-inline">
-                                    <input type="radio" class="form-check-input" name="paket"
+                                    <input type="radio" class="form-check-input" name="jenis_paket"
                                         value="Formal">
                                     <label class="form-check-label">Formal</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input type="radio" class="form-check-input" name="paket"
+                                    <input type="radio" class="form-check-input" name="jenis_paket"
                                         value="Informal">
                                     <label class="form-check-label">Informal</label>
                                 </div>
@@ -450,18 +490,24 @@
                                 </div>
                                 @if($doc == 'Pas Foto')
                                 <input type="file" accept=".jpeg,.png,.jpg"
-                                    name="dokumen[{{ strtolower(str_replace(' ','_',$doc)) }}]">
+                                    name="dokumen[{{ strtolower(str_replace(' ','_',$doc)) }}]"
+                                    class="file-input">
                                 @elseif($doc == 'Dokumen Pernikahan/Perceraian')
                                 <input type="file" accept=".pdf,.jpeg,.png,.jpg"
-                                    name="dokumen[dokumen_pernikahan]">
+                                    name="dokumen[dokumen_pernikahan]"
+                                    class="file-input">
                                 @else
                                 <input type="file" accept=".pdf,.jpeg,.png,.jpg"
-                                    name="dokumen[{{ strtolower(str_replace(' ','_',$doc)) }}]">
+                                    name="dokumen[{{ strtolower(str_replace(' ','_',$doc)) }}]"
+                                    class="file-input">
                                 @endif
                             </div>
                             <!-- @if($doc == 'Pas Foto')
                             <div class="file-error text-danger small mt-1"></div>
                             @endif -->
+                            <!-- 🔽 Nama file tampil disini -->
+                            <div class="selected-file small text-muted mt-2"></div>
+
                             <div class="file-error text-danger small mt-1"></div>
 
                         </div>
@@ -524,7 +570,7 @@
 
 </div>
 <script>
-    document.getElementById('formDataMigran').addEventListener('submit', function(e) {
+    /*document.getElementById('formDataMigran').addEventListener('submit', function(e) {
 
         e.preventDefault();
 
@@ -655,10 +701,162 @@
                 console.log(error);
             });
 
+    });*/
+    document.getElementById('btnSimpan').addEventListener('click', function(e) {
+        let form = document.getElementById("formDataMigran");
+        let formData = new FormData(form);
+
+        // Reset semua error sebelumnya
+        form.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
+        form.querySelectorAll(".invalid-feedback").forEach(el => el.remove());
+        form.querySelectorAll(".file-error").forEach(el => el.innerText = "");
+
+        let progressWrapper = document.getElementById("uploadProgressWrapper");
+        let progressBar = document.getElementById("uploadProgressBar");
+        let percentText = document.getElementById("uploadPercent");
+
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "/datamigran/store", true);
+
+        xhr.setRequestHeader("X-CSRF-TOKEN",
+            document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+        );
+
+        // ===============================
+        // Progress Upload
+        // ===============================
+        xhr.upload.onprogress = function(e) {
+
+            if (e.lengthComputable) {
+
+                let percent = Math.round((e.loaded / e.total) * 100);
+
+                progressWrapper.style.display = "block";
+                progressBar.style.width = percent + "%";
+                percentText.innerText = percent + "%";
+            }
+        };
+
+        // ===============================
+        // Response
+        // ===============================
+        xhr.onload = function() {
+            console.log('onload');
+
+            if (xhr.status === 200) {
+
+                console.log('success');
+                let response = JSON.parse(xhr.responseText);
+
+                progressBar.classList.remove("progress-bar-animated");
+                progressBar.classList.add("bg-success");
+                percentText.innerText = "Upload Complete";
+
+                setTimeout(() => {
+                    progressWrapper.style.display = "none";
+                    progressBar.style.width = "0%";
+                    progressBar.classList.remove("bg-success");
+                    progressBar.classList.add("progress-bar-animated");
+                }, 1500);
+
+                alert(response.message);
+
+            } else if (xhr.status === 422) {
+
+                console.log('validasi');
+                progressWrapper.style.display = "none";
+
+                let response = JSON.parse(xhr.responseText);
+                let errors = response.errors;
+
+                for (const key in errors) {
+
+                    // Convert dot notation ke array notation
+                    let name = key.replace(/\.(\w+)/g, '[$1]');
+
+                    let inputs = form.querySelectorAll(`[name="${name}"]`);
+                    if (!inputs.length) continue;
+
+                    let firstInput = inputs[0];
+
+                    // ================= RADIO =================
+                    if (firstInput.type === "radio") {
+
+                        inputs.forEach(radio => radio.classList.add("is-invalid"));
+
+                        let wrapper = firstInput.closest(".mb-3");
+                        if (wrapper) {
+                            let div = document.createElement("div");
+                            div.className = "invalid-feedback d-block";
+                            div.innerText = errors[key][0];
+                            wrapper.appendChild(div);
+                        }
+                    }
+
+                    // ================= FILE =================
+                    else if (firstInput.type === "file") {
+
+                        let uploadRow = firstInput.closest(".upload-row");
+                        let errorDiv = uploadRow.querySelector(".file-error");
+
+                        if (errorDiv) {
+                            errorDiv.innerText = errors[key][0];
+                        }
+
+                        firstInput.closest(".upload-box")
+                            .classList.add("border-danger");
+                    }
+
+                    // ================= INPUT / SELECT =================
+                    else {
+
+                        firstInput.classList.add("is-invalid");
+
+                        let div = document.createElement("div");
+                        div.className = "invalid-feedback";
+                        div.innerText = errors[key][0];
+
+                        firstInput.after(div);
+                    }
+                }
+            } else {
+                alert("Terjadi kesalahan server.");
+            }
+        };
+
+        xhr.send(formData);
     });
 
     //Routine tambah baris pengalaman
     let pengalamanIndex = 0;
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".file-input").forEach(input => {
+
+            input.addEventListener("change", function() {
+                //alert('masuk');
+                let fileContainer = this.closest(".upload-row")
+                    .querySelector(".selected-file");
+
+                fileContainer.innerHTML = "";
+
+                if (this.files.length > 0) {
+
+                    Array.from(this.files).forEach(file => {
+
+                        let fileItem = document.createElement("div");
+                        fileItem.innerHTML = `
+                    <span>📎 ${file.name}</span>
+                `;
+
+                        fileContainer.appendChild(fileItem);
+                    });
+
+                }
+
+            });
+
+        });
+    });
 
     document.addEventListener("DOMContentLoaded", function() {
 
