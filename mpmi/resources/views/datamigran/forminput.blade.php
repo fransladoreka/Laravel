@@ -100,6 +100,12 @@
         color: #344054;
     }
 
+    .biodata-title {
+        font-weight: 600;
+        font-size: 14px;
+        color: #344054;
+    }
+
     .upload-format {
         font-size: 11px;
         color: #98a2b3;
@@ -253,58 +259,58 @@
                             <h6 class="fw-semibold border-bottom pb-2 mb-3">Biodata</h6>
 
                             <div class="mb-3">
-                                <label class="form-label">Nama <span style="color: red;">*</span></label>
+                                <label class="form-label biodata-title">Nama <span style="color: red;">*</span></label>
                                 <input type="text" name="nama" class="form-control">
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">NIK <span style="color: red;">*</span></label>
+                                <label class="form-label biodata-title">NIK <span style="color: red;">*</span></label>
                                 <input type="text" name="nik" class="form-control">
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">No Passport</label>
+                                <label class="form-label biodata-title">No Passport</label>
                                 <input type="text" name="no_passport" class="form-control">
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Tanggal Mulai Passport</label>
+                                    <label class="form-label biodata-title">Tanggal Mulai Passport</label>
                                     <input type="date" name="tgl_mulai_passport" class="form-control">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Tanggal Berakhir Passport</label>
+                                    <label class="form-label biodata-title">Tanggal Berakhir Passport</label>
                                     <input type="date" name="tgl_berakhir_passport" class="form-control">
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Jenis Kelamin <span style="color: red;">*</span></label><br>
+                                <label class="form-label biodata-title">Jenis Kelamin <span style="color: red;">*</span></label><br>
                                 <div class="form-check form-check-inline">
                                     <input type="radio" class="form-check-input" name="gender"
                                         value="Laki Laki">
-                                    <label class="form-check-label">Laki Laki</label>
+                                    <label class="form-check-label biodata-title">Laki Laki</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input type="radio" class="form-check-input" name="gender"
                                         value="Perempuan">
-                                    <label class="form-check-label">Perempuan</label>
+                                    <label class="form-check-label biodata-title">Perempuan</label>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Tanggal Lahir <span style="color: red;">*</span></label>
+                                    <label class="form-label biodata-title">Tanggal Lahir <span style="color: red;">*</span></label>
                                     <input type="date" name="tgl_lahir" class="form-control">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Tempat Lahir <span style="color: red;">*</span></label>
+                                    <label class="form-label biodata-title">Tempat Lahir <span style="color: red;">*</span></label>
                                     <input type="text" name="tempat_lahir" class="form-control">
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Agama <span style="color: red;">*</span></label>
+                                <label class="form-label biodata-title">Agama <span style="color: red;">*</span></label>
                                 <select name="agama" class="form-select">
                                     <option value="">Pilih Agama</option>
                                     <option value="Islam">Islam</option>
@@ -316,104 +322,104 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Provinsi <span style="color: red;">*</span></label><br>
+                                <label class="form-label biodata-title">Provinsi <span style="color: red;">*</span></label><br>
                                 <div class="form-check form-check-inline">
                                     <input type="radio" class="form-check-input" name="provinsi"
                                         value="Jawa">
-                                    <label class="form-check-label">Jawa</label>
+                                    <label class="form-check-label biodata-title">Jawa</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input type="radio" class="form-check-input" name="provinsi"
                                         value="Luar Jawa">
-                                    <label class="form-check-label">Luar Jawa</label>
+                                    <label class="form-check-label biodata-title">Luar Jawa</label>
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Ex Taiwan <span style="color: red;">*</span></label><br>
+                                <label class="form-label biodata-title">Ex Taiwan <span style="color: red;">*</span></label><br>
                                 <div class="form-check form-check-inline">
                                     <input type="radio" class="form-check-input" name="ex_taiwan"
                                         value="true">
-                                    <label class="form-check-label">Ya</label>
+                                    <label class="form-check-label biodata-title">Ya</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input type="radio" class="form-check-input" name="ex_taiwan"
                                         value="false">
-                                    <label class="form-check-label">Tidak</label>
+                                    <label class="form-check-label biodata-title">Tidak</label>
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Jenis Paket <span style="color: red;">*</span></label><br>
+                                <label class="form-label biodata-title">Jenis Paket <span style="color: red;">*</span></label><br>
                                 <div class="form-check form-check-inline">
                                     <input type="radio" class="form-check-input" name="jenis_paket"
                                         value="Formal">
-                                    <label class="form-check-label">Formal</label>
+                                    <label class="form-check-label biodata-title">Formal</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input type="radio" class="form-check-input" name="jenis_paket"
                                         value="Informal">
-                                    <label class="form-check-label">Informal</label>
+                                    <label class="form-check-label biodata-title">Informal</label>
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Paket Kerja <span style="color: red;">*</span></label>
+                                <label class="form-label biodata-title">Paket Kerja <span style="color: red;">*</span></label>
                                 <select name="paket_kerja" class="form-select">
                                     <option>- Pilih Jenis Paket Terlebih Dahulu -</option>
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Glasses <span style="color: red;">*</span></label><br>
+                                <label class="form-label biodata-title">Glasses <span style="color: red;">*</span></label><br>
                                 <div class="form-check form-check-inline">
                                     <input type="radio" class="form-check-input" name="glasses"
                                         value="true">
-                                    <label class="form-check-label">Yes</label>
+                                    <label class="form-check-label biodata-title">Yes</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input type="radio" class="form-check-input" name="glasses"
                                         value="false">
-                                    <label class="form-check-label">No</label>
+                                    <label class="form-check-label biodata-title">No</label>
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Medical <span style="color: red;">*</span></label><br>
+                                <label class="form-label biodata-title">Medical <span style="color: red;">*</span></label><br>
                                 <div class="form-check form-check-inline">
                                     <input type="radio" class="form-check-input" name="medical"
                                         value="true">
-                                    <label class="form-check-label">Yes</label>
+                                    <label class="form-check-label biodata-title">Yes</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input type="radio" class="form-check-input" name="medical"
                                         value="false">
-                                    <label class="form-check-label">No</label>
+                                    <label class="form-check-label biodata-title">No</label>
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Call Visa <span style="color: red;">*</span></label><br>
+                                <label class="form-label biodata-title">Call Visa <span style="color: red;">*</span></label><br>
                                 <div class="form-check form-check-inline">
                                     <input type="radio" class="form-check-input" name="call_visa"
                                         value="true">
-                                    <label class="form-check-label">Yes</label>
+                                    <label class="form-check-label biodata-title">Yes</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input type="radio" class="form-check-input" name="call_visa"
                                         value="false">
-                                    <label class="form-check-label">No</label>
+                                    <label class="form-check-label biodata-title">No</label>
                                 </div>
                             </div>
 
                             <h6 class="fw-semibold border-bottom pb-2 mt-4 mb-3">Data Alamat</h6>
 
                             <div class="mb-3">
-                                <label class="form-label">No Telp <span style="color: red;">*</span></label>
+                                <label class="form-label biodata-title">No Telp <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" name="no_telpon">
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Alamat <span style="color: red;">*</span></label>
+                                <label class="form-label biodata-title">Alamat <span style="color: red;">*</span></label>
                                 <textarea class="form-control" rows="3" name="alamat"></textarea>
                             </div>
 
@@ -421,11 +427,11 @@
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Nama Kontak Darurat <span style="color: red;">*</span></label>
+                                    <label class="form-label biodata-title">Nama Kontak Darurat <span style="color: red;">*</span></label>
                                     <input type="text" name="nama_kontak_darurat" class="form-control">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Nomor Kontak Darurat <span style="color: red;">*</span></label>
+                                    <label class="form-label biodata-title">Nomor Kontak Darurat <span style="color: red;">*</span></label>
                                     <input type="text" name="nomor_kontak_darurat" class="form-control">
                                 </div>
                             </div>

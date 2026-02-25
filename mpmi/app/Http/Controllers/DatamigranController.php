@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class DatamigranController extends Controller
 {
@@ -18,6 +19,7 @@ class DatamigranController extends Controller
     public function index()
     {
         //
+        return view('datamigran.index');
     }
 
     /**
@@ -182,7 +184,8 @@ class DatamigranController extends Controller
             'pengalaman'
         ])->findOrFail($id);
 
-        return response()->json($dataMigran);
+        //return response()->json($dataMigran);
+        return view('datamigran.show', compact('dataMigran'));
     }
 
     /**
@@ -207,5 +210,16 @@ class DatamigranController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function cetakPdf($id)
+    {
+        $dataMigran = DataMigran::with(['dokumen', 'pengalaman'])->findOrFail($id);
+
+        $pdf = Pdf::loadView('datamigran.pdf', compact('dataMigran'));
+
+        // Set kertas A4 Portrait
+        $pdf->setPaper('A4', 'portrait');
+
+        return $pdf->stream('datamigran_' . $dataMigran->id . '.pdf');
     }
 }
