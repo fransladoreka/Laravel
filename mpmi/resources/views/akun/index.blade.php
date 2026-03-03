@@ -1,57 +1,21 @@
 @extends('layoutes.main')
-@section('head')
+@push('styles')
+
 <style>
-    ul {
-        list-style: none;
-        padding-left: 20px;
-    }
-
-    .tree-item {
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 10px;
-        border-radius: 4px;
-        transition: 0.2s;
-    }
-
-    .tree-item:hover {
-        background-color: #f0f0f0;
-    }
-
-    /* PERBAIKAN DI SINI */
-    .tree-item.selected {
-        background-color: #0d6efd !important;
-        color: #fff !important;
-    }
-
-    .tree-item.selected span,
-    .tree-item.selected i {
-        color: #fff !important;
-    }
-
-    .children {
-        display: none;
-    }
-
-    .toggle {
-        width: 15px;
-        display: inline-block;
-    }
-
-    .menu-item {
-        padding: 8px 12px;
-        cursor: pointer;
-    }
-
-    .menu-item:hover {
-        background: #f0f0f0;
-    }
 </style>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default/style.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/jstree.min.js"></script>
-@endsection
+@endpush
+<style>
+    /* Atur ukuran icon */
+    /* .jstree-default .jstree-themeicon {
+        width: 15px !important;
+        height: 15px !important;
+        line-height: 15px !important;
+        font-size: 10px !important;
+    } */
+</style>
 @section('content')
 <div class="container-fluid px-4">
     <h1 class="mt-4">Akun</h1>
@@ -104,6 +68,39 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+    // $('#tree-container').jstree({
+    //     core: {
+    //         themes: {
+    //             name: 'default', // nama theme yang dipakai
+    //             dots: true, // tampilkan garis
+    //             icons: true // tampilkan icon
+    //         }
+    //     },
+    //     plugins: ['themes']
+    // });
+
+    $('#tree-container').jstree({
+        'core': {},
+        'types': {
+            'default': {
+                'icon': 'fas fa-folder text-warning me-1' // sebelum expand
+            },
+            'open': {
+                'icon': 'fas fa-folder-open text-warning me-1' // saat expand
+            }
+        },
+        'plugins': ['types']
+    });
+
+    // Saat node dibuka
+    $('#tree-container')
+        .on('open_node.jstree', function(e, data) {
+            data.instance.set_type(data.node, 'open');
+        })
+        .on('close_node.jstree', function(e, data) {
+            data.instance.set_type(data.node, 'default');
+        });
+
     // document.addEventListener("DOMContentLoaded", function() {
 
     //     document.querySelectorAll('.tree-item').forEach(item => {
@@ -164,10 +161,12 @@
         if (children && children.classList.contains('children')) {
             if (children.style.display === 'block') {
                 children.style.display = 'none';
-                if (toggle) toggle.textContent = '+';
+                item.classList.remove('expanded');
+                //if (toggle) toggle.textContent = '+';
             } else {
                 children.style.display = 'block';
-                if (toggle) toggle.textContent = '-';
+                item.classList.add('expanded');
+                //if (toggle) toggle.textContent = '-';
             }
         }
 
@@ -179,9 +178,9 @@
                 el.style.color = "";
             });
 
-        item.classList.add('selected');
-        item.style.backgroundColor = "#0d6efd";
-        item.style.color = "#fff";
+        // item.classList.add('selected');
+        // item.style.backgroundColor = "#0d6efd";
+        // item.style.color = "#fff";
 
         // Simpan ID
         document.getElementById('selected_account')
@@ -223,9 +222,9 @@
                     el.style.color = "";
                 });
 
-            item.classList.add('selected');
-            item.style.backgroundColor = "#0d6efd";
-            item.style.color = "#fff";
+            // item.classList.add('selected');
+            // item.style.backgroundColor = "#0d6efd";
+            // item.style.color = "#fff";
 
             menu.style.display = "block";
             menu.style.left = e.pageX + "px";
@@ -455,7 +454,29 @@
             .then(response => response.text())
             .then(html => {
                 //console.log("reloadTree", html);
+                // Hapus tree lama
+                $('#tree-container').jstree('destroy').empty();
                 document.getElementById("tree-container").innerHTML = html;
+                $('#tree-container').jstree({
+                    'core': {},
+                    'types': {
+                        'default': {
+                            'icon': 'fas fa-folder text-warning me-1' // sebelum expand
+                        },
+                        'open': {
+                            'icon': 'fas fa-folder-open text-warning me-1' // saat expand
+                        }
+                    },
+                    'plugins': ['types']
+                });
+                // Saat node dibuka
+                $('#tree-container')
+                    .on('open_node.jstree', function(e, data) {
+                        data.instance.set_type(data.node, 'open');
+                    })
+                    .on('close_node.jstree', function(e, data) {
+                        data.instance.set_type(data.node, 'default');
+                    });
             })
             .catch(error => {
                 console.error("Error:", error);
