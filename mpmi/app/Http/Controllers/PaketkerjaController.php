@@ -34,6 +34,7 @@ class PaketKerjaController extends Controller
             'paketkerja' => 'required|string|max:255',
             'tipe' => 'required|string|max:100',
             'biayaakumulasi' => 'required|numeric|min:0',
+            'biodata' => 'required|string|max:255',
             'status' => 'required|boolean',
         ], [
             'kode.required' => 'Kode paket wajib diisi.',
@@ -42,6 +43,7 @@ class PaketKerjaController extends Controller
             'tipe.required' => 'Tipe paket wajib diisi.',
             'biayaakumulasi.required' => 'Biaya akumulasi wajib diisi.',
             'biayaakumulasi.numeric' => 'Biaya harus berupa angka.',
+            'biodata.required' => 'Biodata wajib diisi.',
             'status.required' => 'Status wajib dipilih.',
             'status.boolean' => 'Status harus aktif (1) atau nonaktif (0).',
         ]);
@@ -79,6 +81,7 @@ class PaketKerjaController extends Controller
             'paketkerja' => 'required|string|max:255',
             'tipe' => 'required|string|max:100',
             'biayaakumulasi' => 'required|numeric|min:0',
+            'biodata' => 'required|string|max:255',
             'status' => 'required|boolean',
         ], [
             'kode.required' => 'Kode paket wajib diisi.',
@@ -87,6 +90,7 @@ class PaketKerjaController extends Controller
             'tipe.required' => 'Tipe paket wajib diisi.',
             'biayaakumulasi.required' => 'Biaya akumulasi wajib diisi.',
             'biayaakumulasi.numeric' => 'Biaya harus berupa angka.',
+            'biodata.required' => 'Biodata wajib diisi.',
             'status.required' => 'Status wajib dipilih.',
             'status.boolean' => 'Status harus aktif (1) atau nonaktif (0).',
         ]);

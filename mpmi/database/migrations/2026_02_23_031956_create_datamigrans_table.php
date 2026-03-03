@@ -26,7 +26,9 @@ return new class extends Migration
             $table->string('provinsi');
             $table->boolean('ex_taiwan');
             $table->string('jenis_paket');
-            $table->string('paket_kerja');
+            $table->foreignId('paket_kerja')
+                ->constrained('paket_kerjas')
+                ->cascadeOnDelete();
             $table->boolean('glasses');
             $table->boolean('medical');
             $table->boolean('call_visa');
@@ -34,6 +36,16 @@ return new class extends Migration
             $table->string('alamat');
             $table->string('nama_kontak_darurat');
             $table->string('nomor_kontak_darurat');
+            $table->string('pendidikan');
+            $table->string('tinggibadan');
+            $table->string('beratbadan');
+            $table->json('bahasa')->nullable();
+            $table->string('nama_ayah');
+            $table->string('nama_ibu');
+            $table->string('status_pernikahan');
+            $table->string('nama_partner');
+            $table->string('son');
+            $table->string('daughter');
         });
         // Schema::create('pengalaman_kerjas', function (Blueprint $table) {
         //     $table->id();

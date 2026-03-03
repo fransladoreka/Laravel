@@ -42,6 +42,12 @@
         @enderror
     </div>
 
+    <label for="biodata">Biodata:</label>
+        <input type="text" name="biodata" id="biodata" value="{{ old('biodata') }}">
+        @error('biodata')
+            <div style="color:red;">{{ $message }}</div>
+        @enderror
+
     <div>
         <label for="status">Status:</label>
         <select name="status" id="status">

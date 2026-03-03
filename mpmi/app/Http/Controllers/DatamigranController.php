@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Datamigran;
+use App\Models\PaketKerja;
 use App\Models\PengalamanKerja;
 use App\Models\Dokumen;
 use Illuminate\Validation\Rule;
@@ -10,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Dompdf\Options;
+use Spatie\Browsershot\Browsershot;
 
 class DatamigranController extends Controller
 {
@@ -27,7 +30,9 @@ class DatamigranController extends Controller
      */
     public function create()
     {
-        //
+        $paketKerja = PaketKerja::all();
+        //dd($paketKerja);
+        return view('datamigran.create', compact('paketKerja'));
     }
 
     /**
@@ -46,7 +51,7 @@ class DatamigranController extends Controller
             'provinsi' => 'required',
             'ex_taiwan' => 'required',
             'jenis_paket' => 'required',
-            // 'paket_kerja' => 'required',
+            'paket_kerja' => 'required',
             'glasses' => 'required',
             'medical' => 'required',
             'call_visa' => 'required',
@@ -54,6 +59,16 @@ class DatamigranController extends Controller
             'alamat' => 'required',
             'nama_kontak_darurat' => 'required',
             'nomor_kontak_darurat' => 'required',
+            'pendidikan' =>  'required',
+            'tinggibadan' =>  'required',
+            'beratbadan' =>  'required',
+            'bahasa' => 'required|array|min:1',
+            'nama_ayah' =>  'required',
+            'nama_ibu' =>  'required',
+            'status_pernikahan' =>  'required',
+            'nama_partner' =>  'required',
+            'son' =>  'required',
+            'daughter' =>  'required',
             'dokumen.pas_foto' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'pengalaman' => 'nullable|array',
 
@@ -78,7 +93,7 @@ class DatamigranController extends Controller
             'provinsi.required' => 'Provinsi wajib dipilih.',
             'ex_taiwan.required' => 'Ex taiwan wajib dipilih.',
             'jenis_paket.required' => 'Jenis paket wajib dipilih.',
-            // 'paket_kerja.required' => 'Paket kerja wajib dipilih.',
+            'paket_kerja.required' => 'Paket kerja wajib dipilih.',
             'glasses.required' => 'Glasses wajib dipilih.',
             'medical.required' => 'medical wajib dipilih.',
             'call_visa.required' => 'Call visa wajib dipilih.',
@@ -86,6 +101,16 @@ class DatamigranController extends Controller
             'alamat.required' => 'Alamat wajib diisi.',
             'nama_kontak_darurat.required' => 'Nama kontak darurat wajib diisi.',
             'nomor_kontak_darurat.required' => 'Nomor kontak darurat wajib diisi.',
+            'pendidikan.required' =>  'Pendidikan wajib diisi',
+            'tinggibadan.required' =>  'Tinggi badan wajib diisi',
+            'beratbadan.required' =>  'Berat badan wajib diisi',
+            'bahasa.required' => 'Bahasa wajib dipilih',
+            'nama_ayah.required' =>  'Nama ayah wajib diisi',
+            'nama_ibu.required' =>  'Nama ibu wajib diisi',
+            'status_pernikahan.required' =>  'Status pernikahan wajib diisi',
+            'nama_partner.required' =>  'Nama partner wajib diisi',
+            'son.required' =>  'Jumlah anak laki-laki wajib diisi',
+            'daughter.required' =>  'Jumlah anak perempuan wajib diisi',
             'dokumen.pas_foto.required' => 'Pas foto wajib diupload.',
             'dokumen.pas_foto.mimes'    => 'Format pas foto harus JPEG/JPG/PNG.',
             'dokumen.pas_foto.max'      => 'Ukuran maksimal 2MB.',
@@ -119,7 +144,7 @@ class DatamigranController extends Controller
                 'provinsi' => $request->provinsi,
                 'ex_taiwan' => $request->ex_taiwan === 'true',
                 'jenis_paket' => $request->jenis_paket,
-                'paket_kerja' => 'PERTANIAN',
+                'paket_kerja' => $request->paket_kerja,
                 'glasses' => $request->glasses === 'true',
                 'medical' => $request->medical === 'true',
                 'call_visa' => $request->call_visa === 'true',
@@ -127,6 +152,16 @@ class DatamigranController extends Controller
                 'alamat' => $request->alamat,
                 'nama_kontak_darurat' => $request->nama_kontak_darurat,
                 'nomor_kontak_darurat' => $request->nomor_kontak_darurat,
+                'pendidikan' => $request->pendidikan,
+                'tinggibadan' => $request->tinggibadan,
+                'beratbadan' => $request->beratbadan,
+                'bahasa' => $request->bahasa,
+                'nama_ayah' => $request->nama_ayah,
+                'nama_ibu' => $request->nama_ibu,
+                'status_pernikahan' => $request->status_pernikahan,
+                'nama_partner' => $request->nama_partner,
+                'son' => $request->son,
+                'daughter' => $request->daughter,
             ]);
 
             if ($request->pengalaman) {
@@ -181,7 +216,8 @@ class DatamigranController extends Controller
     {
         $dataMigran = DataMigran::with([
             'dokumen',
-            'pengalaman'
+            'pengalaman',
+            'paketKerja'
         ])->findOrFail($id);
 
         //return response()->json($dataMigran);
@@ -213,13 +249,49 @@ class DatamigranController extends Controller
     }
     public function cetakPdf($id)
     {
+        // //dd(file_exists(public_path('fonts/NotoSansTC-Regular.ttf')));
         $dataMigran = DataMigran::with(['dokumen', 'pengalaman'])->findOrFail($id);
 
-        $pdf = Pdf::loadView('datamigran.pdf', compact('dataMigran'));
+        // $options = new Options();
+        // $options->set('isRemoteEnabled', true);
+        // $options->set('isHtml5ParserEnabled', true);
 
-        // Set kertas A4 Portrait
-        $pdf->setPaper('A4', 'portrait');
+        // // Register font
+        // $options->set('fontDir', storage_path('fonts'));
+        // $options->set('fontCache', storage_path('fonts'));
 
-        return $pdf->stream('datamigran_' . $dataMigran->id . '.pdf');
+        // $options->set('defaultFont', 'NotoSansTC');
+
+        // $pdf = Pdf::loadView('datamigran.pdf', compact('dataMigran'));
+        // $pdf->setOption('isRemoteEnabled', true);
+        // $pdf->setOption('isHtml5ParserEnabled', true);
+        // //$pdf->setOption('defaultFont', 'NotoCJK');
+
+        // // Set kertas A4 Portrait
+        // $pdf->setPaper('A4', 'portrait');
+
+        // return $pdf->stream('datamigran_' . $dataMigran->id . '.pdf');
+        $html = view('datamigran.pdf', compact('dataMigran'))->render();
+        $pdf = Browsershot::html($html)
+            ->format('A4')
+            ->margins(12, 12, 12, 12)
+            ->emulateMedia('screen')
+            ->showBackground()
+            ->pdf();
+
+        return response($pdf, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="datamigran_' . $id . '.pdf"',
+        ]);
+        // return response()->streamDownload(
+        //     fn() => print(
+        //         Browsershot::html($html)
+        //         ->format('A4')
+        //         ->margins(12, 12, 12, 12)
+        //         ->showBackground()
+        //         ->pdf()
+        //     ),
+        //     "datamigran_{$id}.pdf"
+        // );
     }
 }

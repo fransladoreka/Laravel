@@ -13,6 +13,7 @@ class PaketKerja extends Model
         'paketkerja',
         'tipe',
         'biayaakumulasi',
+        'biodata',
         'status'
     ];
 }

@@ -1,0 +1,1067 @@
+@extends('layoutes.main')
+
+@push('styles')
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+
+<style>
+    .card-custom {
+        border: 0;
+        border-radius: 10px;
+    }
+
+    .section-title {
+        font-weight: 600;
+        font-size: 14px;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 8px;
+        margin-bottom: 15px;
+    }
+
+    .required {
+        color: #dc3545;
+    }
+
+
+    /* ================= DOKUMEN BOX ================= */
+
+    .file-upload-row {
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 12px;
+        background: #fff;
+    }
+
+    .file-upload-row small {
+        font-size: 9px !important;
+        color: #6c757d;
+    }
+
+    .table thead th {
+        font-size: 12px;
+        background: #f1f3f5;
+        text-transform: uppercase;
+    }
+
+    .btn-back {
+        border: 1px solid #dc3545;
+        color: #dc3545;
+    }
+
+    .btn-back:hover {
+        background: #dc3545;
+        color: #fff;
+    }
+
+    .input-hidden {
+        /* Hide the actual input element */
+        display: none;
+    }
+
+    .input-label {
+        /* Style your custom "placeholder" button */
+        display: inline-block;
+        padding: 10px 15px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: white;
+        border-radius: 5px;
+        /* Add other styling as needed */
+    }
+
+    /* Divider Tengah */
+    .divider-vertical {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: #e5e7eb;
+    }
+
+    /* Row */
+    .upload-row {
+        display: flex;
+        justify-content: space-between;
+        /* align-items: center; */
+        align-items: flex-start;
+        margin-bottom: 36px;
+        flex-wrap: wrap;
+    }
+
+    /* Info Kiri */
+    .upload-info {
+        width: 48%;
+    }
+
+    .upload-title {
+        font-weight: 600;
+        font-size: 14px;
+        color: #344054;
+    }
+
+    .biodata-title {
+        font-weight: 600;
+        font-size: 14px;
+        color: #344054;
+    }
+
+    .upload-format {
+        font-size: 11px;
+        color: #98a2b3;
+        margin-top: 4px;
+    }
+
+    /* Upload Box */
+    .upload-box {
+        position: relative;
+        display: flex;
+        width: 48%;
+        height: 42px;
+        border: 1px solid #d0d5dd;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #f9fafb;
+        transition: all .2s ease;
+    }
+
+    /* Kiri */
+    .upload-left {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        padding: 0 14px;
+        font-size: 13px;
+        color: #667085;
+        gap: 8px;
+    }
+
+    /* Kanan */
+    .upload-right {
+        display: flex;
+        align-items: center;
+        padding: 0 22px;
+        font-size: 13px;
+        background: #eef2f6;
+        border-left: 1px solid #d0d5dd;
+        color: #344054;
+        font-weight: 500;
+    }
+
+    .upload-right-wrapper {
+        display: flex;
+        flex-direction: column;
+        /* supaya error turun */
+    }
+
+
+    /* Hover effect */
+    .upload-box:hover {
+        border-color: #3b82f6;
+        background: #f1f5ff;
+    }
+
+    /* Hidden input */
+    .upload-box input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .upload-box.is-invalid {
+        border: 1px solid #dc3545;
+        background: #fff5f5;
+    }
+
+    .file-error {
+        font-size: 12px;
+    }
+
+    .progress-bar {
+        transition: width 0.3s ease;
+    }
+
+    .selected-file {
+        font-size: 13px;
+        color: #475467;
+    }
+
+    .selected-file span {
+        background: #eef2f6;
+        padding: 4px 8px;
+        border-radius: 4px;
+    }
+
+    .biodata-wrapper {
+        max-height: 100%;
+        overflow-y: auto;
+        padding-right: 15px;
+    }
+</style>
+@endpush
+
+@section('content')
+<div class="container-fluid">
+
+    <div class="card shadow-sm">
+        <!-- <div class="card-body d-flex flex-column" style="height: calc(100vh - 190px);"> -->
+        <div class="card-body d-flex flex-column">
+
+            <!-- HEADER -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0 fw-semibold">Form Pegawai Migran</h5>
+                <div>
+                    <button class="btn btn-outline-danger btn-sm me-2">Kembali</button>
+                    <!-- <button class="btn btn-primary btn-sm"
+                        type="submit"
+                        form="formDataMigran"
+                        id="btnSimpan">Simpan</button> -->
+                    <button class="btn btn-primary btn-sm"
+                        id="btnSimpan">Simpan</button>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="mt-3" id="uploadProgressWrapper" style="display:none;">
+                <div class="d-flex justify-content-between mb-1">
+                    <small class="fw-semibold">Uploading...</small>
+                    <small id="uploadPercent">0%</small>
+                </div>
+                <div class="progress" style="height: 8px;">
+                    <div id="uploadProgressBar"
+                        class="progress-bar progress-bar-striped progress-bar-animated"
+                        role="progressbar"
+                        style="width: 0%">
+                    </div>
+                </div>
+            </div>
+
+            <!-- FORM -->
+            <form class="d-flex flex-column flex-grow-1"
+                id="formDataMigran"
+                action="{{ route('datamigran.store') }}"
+                method="POST"
+                enctype="multipart/form-data">
+                @csrf
+                <!-- ROW ATAS -->
+                <!-- <div class="row flex-grow-1 overflow-hidden"> -->
+                <div class="row flex-grow-1">
+
+                    <!-- ================= LEFT (SCROLL AKTIF) ================= -->
+                    <div class="col-lg-6 d-flex flex-column">
+
+                        <!-- <div class="flex-grow-1 overflow-auto pe-3"> -->
+                        <!-- <div style="height: calc(215vh); overflow-y:auto; padding-right:15px;"> -->
+                        <!-- <div style="height: 1500px; overflow-y:auto; padding-right:15px;"> -->
+                        <div style="height: 1500px; overflow-y:auto; padding-right:15px;">
+
+                            <h6 class="fw-semibold border-bottom pb-2 mb-3">Biodata</h6>
+
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">Nama <span style="color: red;">*</span></label>
+                                <input type="text" name="nama" class="form-control">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">NIK <span style="color: red;">*</span></label>
+                                <input type="text" name="nik" class="form-control">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">No Passport</label>
+                                <input type="text" name="no_passport" class="form-control">
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label biodata-title">Tanggal Mulai Passport</label>
+                                    <input type="date" name="tgl_mulai_passport" class="form-control">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label biodata-title">Tanggal Berakhir Passport</label>
+                                    <input type="date" name="tgl_berakhir_passport" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">Jenis Kelamin <span style="color: red;">*</span></label><br>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="gender"
+                                        value="Laki Laki">
+                                    <label class="form-check-label biodata-title">Laki Laki</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="gender"
+                                        value="Perempuan">
+                                    <label class="form-check-label biodata-title">Perempuan</label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label biodata-title">Tanggal Lahir <span style="color: red;">*</span></label>
+                                    <input type="date" name="tgl_lahir" class="form-control">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label biodata-title">Tempat Lahir <span style="color: red;">*</span></label>
+                                    <input type="text" name="tempat_lahir" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">Agama <span style="color: red;">*</span></label>
+                                <select name="agama" class="form-select">
+                                    <option value="">Pilih Agama</option>
+                                    <option value="Islam">Islam</option>
+                                    <option value="Kristen">Kristen</option>
+                                    <option value="Katolik">Katolik</option>
+                                    <option value="Hindu">Hindu</option>
+                                    <option value="Buddha">Buddha</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">Provinsi <span style="color: red;">*</span></label><br>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="provinsi"
+                                        value="Jawa">
+                                    <label class="form-check-label biodata-title">Jawa</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="provinsi"
+                                        value="Luar Jawa">
+                                    <label class="form-check-label biodata-title">Luar Jawa</label>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">Ex Taiwan <span style="color: red;">*</span></label><br>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="ex_taiwan"
+                                        value="true">
+                                    <label class="form-check-label biodata-title">Ya</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="ex_taiwan"
+                                        value="false">
+                                    <label class="form-check-label biodata-title">Tidak</label>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">Jenis Paket <span style="color: red;">*</span></label><br>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="jenis_paket"
+                                        value="Formal">
+                                    <label class="form-check-label biodata-title">Formal</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="jenis_paket"
+                                        value="Informal">
+                                    <label class="form-check-label biodata-title">Informal</label>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">Paket Kerja <span style="color: red;">*</span></label>
+                                <select name="paket_kerja" class="form-select">
+                                    <option value="">- Pilih Jenis Paket Terlebih Dahulu -</option>
+                                    @foreach ($paketKerja as $paket)
+                                    <option value="{{ $paket->id }}" {{ $paket->id == old('paket_kerja', request('paket_kerja')) ? 'selected' : '' }}>
+                                        {{ $paket->paketkerja }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">Glasses <span style="color: red;">*</span></label><br>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="glasses"
+                                        value="true">
+                                    <label class="form-check-label biodata-title">Yes</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="glasses"
+                                        value="false">
+                                    <label class="form-check-label biodata-title">No</label>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">Medical <span style="color: red;">*</span></label><br>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="medical"
+                                        value="true">
+                                    <label class="form-check-label biodata-title">Yes</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="medical"
+                                        value="false">
+                                    <label class="form-check-label biodata-title">No</label>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">Call Visa <span style="color: red;">*</span></label><br>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="call_visa"
+                                        value="true">
+                                    <label class="form-check-label biodata-title">Yes</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="call_visa"
+                                        value="false">
+                                    <label class="form-check-label biodata-title">No</label>
+                                </div>
+                            </div>
+
+                            <h6 class="fw-semibold border-bottom pb-2 mt-4 mb-3">Data Alamat</h6>
+
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">No Telp <span style="color: red;">*</span></label>
+                                <input type="text" class="form-control" name="no_telpon">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">Alamat <span style="color: red;">*</span></label>
+                                <textarea class="form-control" rows="3" name="alamat"></textarea>
+                            </div>
+
+                            <h6 class="fw-semibold border-bottom pb-2 mt-4 mb-3">Kontak Darurat</h6>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label biodata-title">Nama Kontak Darurat <span style="color: red;">*</span></label>
+                                    <input type="text" name="nama_kontak_darurat" class="form-control">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label biodata-title">Nomor Kontak Darurat <span style="color: red;">*</span></label>
+                                    <input type="text" name="nomor_kontak_darurat" class="form-control">
+                                </div>
+                            </div>
+
+                            <h6 class="fw-semibold border-bottom pb-2 mt-4 mb-3">Info Personal</h6>
+
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">Pndidikan <span style="color: red;">*</span></label>
+                                <input type="text" class="form-control" name="pendidikan">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label biodata-title">Umur <span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" disabled>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label biodata-title">Berat (Kg) <span style="color: red;">*</span></label>
+                                    <input type="number" name="beratbadan" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label biodata-title">Tinggi (cm) <span style="color: red;">*</span></label>
+                                    <input type="number" name="tinggibadan" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!-- Kolom 1 (Perbandingan 1) -->
+                                <div class="col-md-3">
+                                    <label class="form-label biodata-title">Menguasai Bahasa <span style="color: red;">*</span></label>
+                                </div>
+                                <!-- Kolom 2 (Perbandingan 4) -->
+                                <div class="col-md-9">
+                                    <label style="margin-right: 4px;">
+                                        <input class="form-check-input" type="checkbox" name="bahasa[]" value="mandarin">
+                                        中文/Mandarin
+                                    </label>
+
+                                    <label style="margin-right: 4px;">
+                                        <input class="form-check-input " type="checkbox" name="bahasa[]" value="taiwanese">
+                                        台語/Taiwanese
+                                    </label>
+
+                                    <label style="margin-right: 4px;">
+                                        <input class="form-check-input" type="checkbox" name="bahasa[]" value="english">
+                                        英文/English
+                                    </label style="margin-right: 4px;">
+
+                                    <label style="margin-right: 4px;">
+                                        <input class="form-check-input" type="checkbox" name="bahasa[]" value="indonesian">
+                                        印尼文/Indonesian
+                                    </label>
+                                    <label style="margin-right: 4px;">
+                                        <input class="form-check-input" type="checkbox" name="bahasa[]" value="others">
+                                        其他語文/Others
+                                    </label>
+                                </div>
+                                @error('bahasa')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <h6 class="fw-semibold border-bottom pb-2 mt-4 mb-3">Data Keluarga</h6>
+
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">Nama Ayah <span style="color: red;">*</span></label>
+                                <input type="text" class="form-control" name="nama_ayah">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">Nama Ibu <span style="color: red;">*</span></label>
+                                <input type="text" class="form-control" name="nama_ibu">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">Status Pernikahan <span style="color: red;">*</span></label><br>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="status_pernikahan"
+                                        value="Belum Menikah">
+                                    <label class="form-check-label biodata-title">Belum Menikah/未婚</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="status_pernikahan"
+                                        value="Menikah">
+                                    <label class="form-check-label biodata-title">Menikah/已婚</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="status_pernikahan"
+                                        value="Cerai">
+                                    <label class="form-check-label biodata-title">Cerai/離婚的</label>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">Nama Partner <span style="color: red;">*</span></label>
+                                <input type="text" class="form-control" name="nama_partner">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">Jumlah Anak Laki-Laki <span style="color: red;">*</span></label>
+                                <input type="number" class="form-control" name="son">
+                                <div class="selected-file small text-muted mt-2">Isi dengan 0 jika tidak memiliki anak</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label biodata-title">Jumlah Anak Perempuan <span style="color: red;">*</span></label>
+                                <input type="number" class="form-control" name="daughter">
+                                <div class="selected-file small text-muted mt-2">Isi dengan 0 jika tidak memiliki anak</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ================= RIGHT COLUMN ================= -->
+                    <div class="col-lg-6 position-relative ps-5">
+
+
+                        <div class="section-title fw-semibold">Dokumen</div>
+                        @php
+                        $documents = [
+                        'Dokumen KTP',
+                        'Dokumen KK',
+                        'Dokumen Akta Kelahiran',
+                        'Dokumen Ijazah Terakhir',
+                        'Dokumen Pernikahan/Perceraian',
+                        'Passport',
+                        'Pas Foto',
+                        'Surat Vaksin 1',
+                        'Surat Vaksin 2',
+                        'Surat Vaksin 3',
+                        'Dokumen SAW',
+                        'Dokumen SIK',
+                        'BPJS Pra',
+                        'BPJS purna',
+                        'Data Wali'
+                        ];
+                        @endphp
+
+                        @foreach($documents as $doc)
+                        <div class="upload-row">
+
+                            <div class="upload-info">
+                                <div class="upload-title">
+                                    {{ $doc }}
+                                    @if ($doc == 'Pas Foto')
+                                    <span style="color: red;">*</span>
+                                    @endif
+                                </div>
+                                <div class="upload-format">
+                                    @if($doc == 'Dokumen Pernikahan/Perceraian')
+                                    *Apabila sudah menikah<br>*Format dalam bentuk<br>PDF,JPEG,PNG,JPG
+                                    @elseif($doc == 'Pas Foto')
+                                    *Format dalam bentuk<br>JPEG,PNG,JPG
+                                    @else
+                                    *Format dalam bentuk<br>PDF,JPEG,PNG,JPG
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="upload-box">
+                                <div class="upload-left">
+                                    <i class="fa-solid fa-paperclip"></i>
+                                    Pilih Dokumen
+                                </div>
+                                <div class="upload-right">
+                                    Browse
+                                </div>
+                                @if($doc == 'Pas Foto')
+                                <input type="file" accept=".jpeg,.png,.jpg"
+                                    name="dokumen[{{ strtolower(str_replace(' ','_',$doc)) }}]"
+                                    class="file-input">
+                                @elseif($doc == 'Dokumen Pernikahan/Perceraian')
+                                <input type="file" accept=".pdf,.jpeg,.png,.jpg"
+                                    name="dokumen[dokumen_pernikahan]"
+                                    class="file-input">
+                                @else
+                                <input type="file" accept=".pdf,.jpeg,.png,.jpg"
+                                    name="dokumen[{{ strtolower(str_replace(' ','_',$doc)) }}]"
+                                    class="file-input">
+                                @endif
+                            </div>
+                            <!-- @if($doc == 'Pas Foto')
+                            <div class="file-error text-danger small mt-1"></div>
+                            @endif -->
+                            <!-- 🔽 Nama file tampil disini -->
+                            <div class="selected-file small text-muted mt-2"></div>
+
+                            <div class="file-error text-danger small mt-1"></div>
+
+                        </div>
+                        @endforeach
+                    </div>
+
+                </div>
+
+                <!-- ================= PENGALAMAN ================= -->
+                <div class="mt-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="fw-semibold mb-0">Data Pengalaman Kerja</h6>
+                        <button type="button" class="btn btn-outline-primary btn-sm"
+                            id="btnTambahPengalaman">
+                            + Tambah Pengalaman
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Negara</th>
+                                    <th>Posisi</th>
+                                    <th>Working Content</th>
+                                    <th>Tahun Awal</th>
+                                    <th>Tahun Akhir</th>
+                                    <th>Alasan Keluar</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablePengalamanBody">
+                                <!-- <tr>
+                                    <td>1</td>
+                                    <td><input type="text" name="negara"
+                                            class="form-control form-control-sm"></td>
+                                    <td><input type="text" name="posisi"
+                                            class="form-control form-control-sm"></td>
+                                    <td><input type="text" name="working_content"
+                                            class="form-control form-control-sm"></td>
+                                    <td><input type="number" name="tahun_awal"
+                                            class="form-control form-control-sm"></td>
+                                    <td><input type="number" name="tahun_akhir"
+                                            class="form-control form-control-sm"></td>
+                                    <td><input type="text" name="alasan_keluar"
+                                            class="form-control form-control-sm"></td>
+                                    <td><button class="btn btn-danger btn-sm">Hapus</button></td>
+                                </tr> -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+<script>
+    /*document.getElementById('formDataMigran').addEventListener('submit', function(e) {
+
+        e.preventDefault();
+
+        let form = this;
+        let formData = new FormData(form);
+
+        // Hapus error lama
+        form.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
+        form.querySelectorAll(".invalid-feedback").forEach(el => el.remove());
+
+        // let fileInput = document.querySelector('[name="dokumen[pas_foto]"]');
+
+        // console.log(fileInput.files);
+        // console.log(fileInput.files.length);
+        for (let pair of formData.entries()) {
+            console.log(pair[0], pair[1]);
+        }
+
+        fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                }
+            })
+            //.then(response => response.json())
+            .then(async res => {
+                if (res.status === 422) {
+                    // Validasi gagal
+                    let data = await res.json();
+                    //console.log(data.errors);
+                    let errors = data.errors;
+
+                    // Tampilkan error di bawah input
+                    for (const key in errors) {
+                        let name = key.replace(/\.(\w+)/g, '[$1]');
+
+                        // let inputs = form.querySelectorAll(`[name="${key}"]`);
+                        let inputs = form.querySelectorAll(`[name="${name}"]`);
+
+
+                        if (!inputs.length) continue;
+
+                        // =====================
+                        // Jika RADIO
+                        // =====================
+                        if (inputs[0].type === "radio") {
+
+                            inputs.forEach(radio => {
+                                radio.classList.add("is-invalid");
+                            });
+
+                            // Cari wrapper terdekat untuk taruh error
+                            let wrapper = inputs[0].closest(".mb-3");
+
+                            if (wrapper && !wrapper.querySelector(".invalid-feedback")) {
+
+                                let div = document.createElement("div");
+                                div.className = "invalid-feedback d-block";
+                                div.innerText = errors[key][0];
+
+                                wrapper.appendChild(div);
+                            }
+
+                        }
+                        // ================= FILE UPLOAD =================
+                        else if (inputs[0].type === "file") {
+                            let firstInput = inputs[0];
+                            let uploadBox = firstInput.closest(".upload-box");
+                            if (uploadBox) {
+                                uploadBox.classList.add("is-invalid");
+                            }
+
+                            let errorDiv = firstInput.closest(".upload-row")
+                                .querySelector(".file-error");
+
+                            if (errorDiv) {
+                                errorDiv.innerText = errors[key][0];
+                            }
+                        } else {
+
+                            // =====================
+                            // Input biasa (text, select, file, dll)
+                            // =====================
+                            let input = inputs[0];
+                            input.classList.add("is-invalid");
+
+                            if (!input.nextElementSibling ||
+                                !input.nextElementSibling.classList.contains("invalid-feedback")) {
+
+                                let div = document.createElement("div");
+                                div.className = "invalid-feedback";
+                                div.innerText = errors[key][0];
+
+                                input.after(div);
+                            }
+                        }
+                    }
+                    // for (const key in errors) {
+                    //     let input = form.querySelector(`[name="${key}"]`);
+                    //     if (input) {
+                    //         input.classList.add("is-invalid");
+                    //         let div = document.createElement("div");
+                    //         div.className = "invalid-feedback";
+                    //         div.innerText = errors[key][0];
+                    //         input.after(div);
+                    //     }
+                    // }
+                } else {
+                    return res.json();
+                }
+            })
+            .then(data => {
+
+                if (data.success) {
+
+                    alert(data.message);
+
+                    form.reset();
+
+                } else {
+                    alert('Gagal: ' + data.message);
+                }
+
+            })
+            .catch(error => {
+                alert('Terjadi kesalahan sistem');
+                console.log(error);
+            });
+
+    });*/
+    document.getElementById('btnSimpan').addEventListener('click', function(e) {
+
+        e.preventDefault();
+
+        const form = document.getElementById("formDataMigran");
+        const formData = new FormData(form);
+
+        resetErrors(form);
+
+        const progressWrapper = document.getElementById("uploadProgressWrapper");
+        const progressBar = document.getElementById("uploadProgressBar");
+        const percentText = document.getElementById("uploadPercent");
+
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/datamigran", true);
+
+        xhr.setRequestHeader("X-CSRF-TOKEN",
+            document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+        );
+
+        // ================= PROGRESS =================
+        xhr.upload.onprogress = function(e) {
+            if (e.lengthComputable) {
+                let percent = Math.round((e.loaded / e.total) * 100);
+                progressWrapper.style.display = "block";
+                progressBar.style.width = percent + "%";
+                percentText.innerText = percent + "%";
+            }
+        };
+
+        // ================= RESPONSE =================
+        xhr.onload = function() {
+
+            if (xhr.status === 200) {
+
+                handleSuccess(progressWrapper, progressBar, percentText, xhr);
+
+            } else if (xhr.status === 422) {
+
+                progressWrapper.style.display = "none";
+
+                let response = JSON.parse(xhr.responseText);
+                handleValidationErrors(form, response.errors);
+
+            } else {
+                progressWrapper.style.display = "none";
+                alert("Terjadi kesalahan server.");
+            }
+        };
+
+        xhr.send(formData);
+    });
+
+
+    // ================= RESET ERROR =================
+    function resetErrors(form) {
+        form.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
+        form.querySelectorAll(".invalid-feedback").forEach(el => el.remove());
+        form.querySelectorAll(".file-error").forEach(el => el.innerText = "");
+    }
+
+
+    // ================= SUCCESS =================
+    function handleSuccess(progressWrapper, progressBar, percentText, xhr) {
+
+        let response = JSON.parse(xhr.responseText);
+
+        progressBar.classList.remove("progress-bar-animated");
+        progressBar.classList.add("bg-success");
+        percentText.innerText = "Upload Complete";
+
+        setTimeout(() => {
+            progressWrapper.style.display = "none";
+            progressBar.style.width = "0%";
+            progressBar.classList.remove("bg-success");
+            progressBar.classList.add("progress-bar-animated");
+        }, 1500);
+
+        alert(response.message);
+    }
+
+
+    // ================= VALIDATION =================
+    function handleValidationErrors(form, errors) {
+
+        for (const key in errors) {
+
+            let message = errors[key][0];
+
+            // convert dot notation -> array notation
+            let name = key.replace(/\.(\w+)/g, '[$1]');
+
+            let inputs = form.querySelectorAll(
+                `[name="${name}"], [name="${name}[]"]`
+            );
+
+            if (!inputs.length) continue;
+
+            let firstInput = inputs[0];
+
+            // ===== RADIO GROUP =====
+            if (firstInput.type === "radio") {
+
+                inputs.forEach(radio => radio.classList.add("is-invalid"));
+
+                appendGroupError(firstInput, message);
+
+            }
+
+            // ===== CHECKBOX GROUP =====
+            else if (firstInput.type === "checkbox") {
+
+                inputs.forEach(cb => cb.classList.add("is-invalid"));
+
+                appendGroupError(firstInput, message);
+
+            }
+
+            // ===== FILE =====
+            else if (firstInput.type === "file") {
+
+                firstInput.classList.add("is-invalid");
+
+                let uploadRow = firstInput.closest(".upload-row");
+                if (uploadRow) {
+                    let errorDiv = uploadRow.querySelector(".file-error");
+                    if (errorDiv) errorDiv.innerText = message;
+                }
+            }
+
+            // ===== INPUT / SELECT / TEXTAREA =====
+            else {
+
+                firstInput.classList.add("is-invalid");
+
+                let div = document.createElement("div");
+                div.className = "invalid-feedback";
+                div.innerText = message;
+
+                firstInput.after(div);
+            }
+        }
+    }
+
+
+    // ================= GROUP ERROR HELPER =================
+    function appendGroupError(input, message) {
+
+        let wrapper = input.closest(".mb-3, .col-md-9, .form-group");
+
+        if (!wrapper) return;
+
+        if (wrapper.querySelector(".invalid-feedback")) return;
+
+        let div = document.createElement("div");
+        div.className = "invalid-feedback d-block";
+        div.innerText = message;
+
+        wrapper.appendChild(div);
+    }
+
+    //Routine tambah baris pengalaman
+    let pengalamanIndex = 0;
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".file-input").forEach(input => {
+
+            input.addEventListener("change", function() {
+                //alert('masuk');
+                let fileContainer = this.closest(".upload-row")
+                    .querySelector(".selected-file");
+
+                fileContainer.innerHTML = "";
+
+                if (this.files.length > 0) {
+
+                    Array.from(this.files).forEach(file => {
+
+                        let fileItem = document.createElement("div");
+                        fileItem.innerHTML = `
+                    <span>📎 ${file.name}</span>
+                `;
+
+                        fileContainer.appendChild(fileItem);
+                    });
+
+                }
+
+            });
+
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const btnTambah = document.getElementById("btnTambahPengalaman");
+        const tbody = document.getElementById("tablePengalamanBody");
+
+        // Auto tambah 1 baris saat load
+        tambahRow();
+
+        btnTambah.addEventListener("click", function() {
+            tambahRow();
+        });
+
+        tbody.addEventListener("click", function(e) {
+            if (e.target.classList.contains("btn-hapus")) {
+
+                const rows = tbody.querySelectorAll("tr");
+
+                // 🔥 CEK JUMLAH ROW
+                if (rows.length <= 1) {
+                    alert("Minimal harus ada 1 pengalaman kerja.");
+                    return;
+                }
+
+                e.target.closest("tr").remove();
+                updateNomor();
+            }
+        });
+
+        function tambahRow() {
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+            <td class="no"></td>
+            <td><input type="text" name="pengalaman[${pengalamanIndex}][negara]" class="form-control form-control-sm"></td>
+            <td><input type="text" name="pengalaman[${pengalamanIndex}][posisi]" class="form-control form-control-sm"></td>
+            <td><input type="text" name="pengalaman[${pengalamanIndex}][working_content]" class="form-control form-control-sm"></td>
+            <td><input type="number" name="pengalaman[${pengalamanIndex}][tahun_awal]" class="form-control form-control-sm"></td>
+            <td><input type="number" name="pengalaman[${pengalamanIndex}][tahun_akhir]" class="form-control form-control-sm"></td>
+            <td><input type="text" name="pengalaman[${pengalamanIndex}][alasan_keluar]" class="form-control form-control-sm"></td>
+            <td>
+                <button type="button" class="btn btn-danger btn-sm btn-hapus">Hapus</button>
+            </td>
+        `;
+
+            tbody.appendChild(row);
+
+            pengalamanIndex++;
+            updateNomor();
+        }
+
+        function updateNomor() {
+            const rows = tbody.querySelectorAll("tr");
+            rows.forEach((row, index) => {
+                row.querySelector(".no").innerText = index + 1;
+            });
+        }
+
+    });
+</script>
+@endsection

@@ -44,6 +44,14 @@
     </div>
 
     <div>
+        <label for="biodata">Biodata:</label>
+        <input type="text" name="biodata" id="biodata" value="{{ old('biodata', $paketKerja->biodata) }}">
+        @error('biodata')
+        <div style="color:red;">{{ $message }}</div>
+        @enderror
+    </div>
+
+    <div>
         <label for="status">Status:</label>
         <select name="status" id="status">
             <option value="1" {{ old('status', $paketKerja->status) == 1 ? 'selected' : '' }}>Aktif</option>

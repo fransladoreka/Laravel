@@ -31,6 +31,7 @@
             <th>Paket Kerja</th>
             <th>Tipe</th>
             <th>Biaya Akumulasi</th>
+            <th>Biodata</th>
             <th>Status</th>
             <th width="150">Aksi</th>
         </tr>
@@ -43,6 +44,7 @@
             <td>{{ $paket->paketkerja }}</td>
             <td>{{ $paket->tipe }}</td>
             <td>Rp {{ number_format($paket->biayaakumulasi, 2, ',', '.') }}</td>
+            <td>{{ $paket->biodata }}</td>
             <td>
                 @if($paket->status)
                     <span style="color:green;">Aktif</span>
