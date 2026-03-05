@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AkunAkuntansiController;
 use App\Http\Controllers\DatamigranController;
+use App\Http\Controllers\HakAkses;
 use App\Http\Controllers\PaketKerjaController;
 
 Route::get('/', function () {
@@ -28,3 +29,6 @@ Route::resource('datamigran', DatamigranController::class);
 Route::get('/datamigran/{id}/pdf', [DatamigranController::class, 'cetakPdf'])
     ->name('datamigran.pdf');
 Route::resource('paketkerja', PaketKerjaController::class);
+Route::get('/hakakses/permission', [HakAkses::class, 'permission'])
+    ->name('hakakses.permision');
+Route::resource('hakakses', HakAkses::class);

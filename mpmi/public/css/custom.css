@@ -1,0 +1,10 @@
+#tableHakAkses th,
+#tableHakAkses td {
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+#tableHakAkses tbody tr {
+    border-bottom: 1px solid #dee2e6;
+}

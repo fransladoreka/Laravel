@@ -8,13 +8,60 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/jstree.min.js"></script>
 @endpush
 <style>
-    /* Atur ukuran icon */
-    /* .jstree-default .jstree-themeicon {
-        width: 15px !important;
-        height: 15px !important;
-        line-height: 15px !important;
-        font-size: 10px !important;
-    } */
+    .jstree-default .jstree-anchor {
+        height: 24px !important;
+        line-height: 24px !important;
+        padding: 0 4px !important;
+        font-size: 14px;
+        /* teks normal */
+        display: inline-flex;
+        align-items: center;
+        /* teks, icon, checkbox sejajar */
+    }
+
+    /* Hilangkan garis vertikal di node root pertama */
+    .jstree-default>ul>li.jstree-node>.jstree-children::before {
+        display: none !important;
+    }
+
+    /* =========================
+   CHECKBOX PROPORSIONAL
+========================= */
+    .jstree-default .jstree-checkbox {
+        transform: scale(0.9);
+        /* skala kecil supaya tidak dominan */
+        transform-origin: center;
+        margin-right: 4px;
+        /* jarak ke icon */
+    }
+
+    /* =========================
+   ICON FOLDER PROPORSIONAL
+========================= */
+    .jstree-default .jstree-themeicon {
+        width: 16px !important;
+        /* container icon */
+        height: 16px !important;
+        line-height: 16px !important;
+        text-align: center !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin-right: 4px;
+        /* jarak ke teks */
+    }
+
+    .jstree-default .jstree-themeicon i {
+        font-size: 16px !important;
+        vertical-align: middle;
+    }
+
+    /* =========================
+   Teks tetap sejajar
+========================= */
+    .jstree-default .jstree-anchor .jstree-themeleaf {
+        vertical-align: middle;
+    }
 </style>
 @section('content')
 <div class="container-fluid px-4">
