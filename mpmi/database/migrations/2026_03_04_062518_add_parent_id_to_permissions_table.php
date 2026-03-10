@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('permissions', function (Blueprint $table) {
-             $table->unsignedBigInteger('parent_id')->nullable()->after('id');
+             $table->ulid('parent_id')->nullable()->after('id');
              $table->string('display_name')->nullable()->after('name');
         });
     }
