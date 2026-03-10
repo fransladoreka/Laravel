@@ -1,9 +1,16 @@
 <?php
+
 namespace App\Models;
+
 use Spatie\Permission\Models\Permission as SpatiePermission;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 
 class Permission extends SpatiePermission
 {
+    use HasUlids;
+
+    public $incrementing = false;
+    protected $keyType = 'string';
     protected $fillable = [
         'name',
         'guard_name',
