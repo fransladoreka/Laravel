@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('permissions', function (Blueprint $table) {
-             $table->ulid('parent_id')->nullable()->after('id');
-             $table->string('display_name')->nullable()->after('name');
+            $table->ulid('parent_id')->nullable()->after('id');
+            $table->string('display_name')->nullable()->after('name');
+            // $table->foreign('parent_id')
+            //     ->references('id')
+            //     ->on('permissions')
+            //     ->cascadeOnDelete();
         });
     }
 
@@ -23,7 +27,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('permissions', function (Blueprint $table) {
-            $table->dropColumn(['parent_id','display_name']);
+            // $table->dropForeign(['parent_id']);
+            $table->dropColumn(['parent_id', 'display_name']);
         });
     }
 };

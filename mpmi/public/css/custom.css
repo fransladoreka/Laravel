@@ -89,3 +89,26 @@
         transform: rotate(360deg);
     }
 }
+
+/* Container table agar scroll otomatis jika tabel tinggi melebihi card */
+.card-table-container {
+    overflow-x: auto;
+    overflow-y: visible;
+}
+
+/* .card-table-container table {
+    height: 100%;
+    display: block;
+    width: 100%;
+} */
+
+table {
+    width: 100%;
+}
+
+.dropdownMenu {
+    position: absolute;
+    display: none;
+    z-index: 9999;
+    white-space: nowrap;
+}

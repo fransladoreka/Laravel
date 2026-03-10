@@ -1041,8 +1041,8 @@
             <td><input type="text" name="pengalaman[${pengalamanIndex}][negara]" class="form-control form-control-sm"></td>
             <td><input type="text" name="pengalaman[${pengalamanIndex}][posisi]" class="form-control form-control-sm"></td>
             <td><input type="text" name="pengalaman[${pengalamanIndex}][working_content]" class="form-control form-control-sm"></td>
-            <td><input type="number" name="pengalaman[${pengalamanIndex}][tahun_awal]" class="form-control form-control-sm"></td>
-            <td><input type="number" name="pengalaman[${pengalamanIndex}][tahun_akhir]" class="form-control form-control-sm"></td>
+            <td><input type="number" name="pengalaman[${pengalamanIndex}][mulai]" class="form-control form-control-sm"></td>
+            <td><input type="number" name="pengalaman[${pengalamanIndex}][selesai]" class="form-control form-control-sm"></td>
             <td><input type="text" name="pengalaman[${pengalamanIndex}][alasan_keluar]" class="form-control form-control-sm"></td>
             <td>
                 <button type="button" class="btn btn-danger btn-sm btn-hapus">Hapus</button>

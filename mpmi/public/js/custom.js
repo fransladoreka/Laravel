@@ -203,73 +203,6 @@ function showPermission(id) {
         });
 }
 
-// function showPermission(id) {
-//     isTreeReady = false;
-//     var x = document.getElementById("tombolSimpanPermission");
-//     if (x.style.display === "block") x.style.display = "none";
-
-//     var collapseEl = document.getElementById("treeContainer");
-//     var bsCollapse = bootstrap.Collapse.getOrCreateInstance(collapseEl);
-
-//     // Hanya buka jika collapse belum terlihat
-//     if (!collapseEl.classList.contains("show")) {
-//         bsCollapse.show();
-//     }
-
-//     // Inisialisasi tree sekali
-//     if (!treeInitialized) {
-//         $("#tree").jstree({
-//             core: {
-//                 data: {
-//                     url: "/hakakses/permission",
-//                     dataType: "json",
-//                 },
-//                 multiple: true,
-//                 themes: {
-//                     dots: false,
-//                 },
-//             },
-//             types: {
-//                 default: { icon: "fas fa-folder text-warning" },
-//                 open: { icon: "fas fa-folder-open text-warning" },
-//             },
-//             checkbox: {
-//                 keep_selected_style: false,
-//                 three_state: true,
-//                 cascade: "up+down",
-//             },
-//             plugins: ["checkbox", "types", "changed"],
-//         });
-
-//         $("#tree")
-//             .on("open_node.jstree", function (e, data) {
-//                 data.instance.set_type(data.node, "open");
-//             })
-//             .on("close_node.jstree", function (e, data) {
-//                 data.instance.set_type(data.node, "default");
-//             })
-//             .on("ready.jstree", function () {
-//                 console.log("tree ready");
-//                 isTreeReady = true;
-//             })
-//             .on("changed.jstree", function (e, data) {
-//                 if (!isTreeReady) return;
-//                 if (
-//                     data.action === "select_node" ||
-//                     data.action === "deselect_node"
-//                 ) {
-//                     var x = document.getElementById("tombolSimpanPermission");
-//                     x.style.display = "block";
-//                 }
-//             });
-
-//         treeInitialized = true;
-//     } else {
-//         // Refresh data setiap kali tombol diklik
-//         $("#tree").jstree(true).refresh();
-//     }
-// }
-
 function SimpanPermission() {
     const tombol = document.getElementById("tombolSimpanPermission");
     let btnSpinner = tombol.querySelector(".btn-spinner");
@@ -449,3 +382,49 @@ document
                 });
             });
     });
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".dropdownBtn").forEach((btn) => {
+        const menu = btn.nextElementSibling;
+
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+
+            // tutup menu lain
+            document.querySelectorAll(".dropdownMenu").forEach((m) => {
+                if (m !== menu) m.style.display = "none";
+            });
+
+            const isVisible = menu.style.display === "block";
+            if (isVisible) {
+                menu.style.display = "none";
+                return;
+            }
+
+            // pindahkan menu ke body agar tidak mempengaruhi scroll tabel
+            document.body.appendChild(menu);
+
+            // tampilkan sementara agar offsetWidth terbaca
+            menu.style.display = "block";
+            menu.style.visibility = "hidden"; // tetap tersembunyi
+
+            // hitung posisi tombol
+            const rect = btn.getBoundingClientRect();
+
+            // posisi menu tepat di bawah tombol, kanan sejajar tombol
+            menu.style.top = rect.bottom + window.scrollY + "px";
+            menu.style.left =
+                rect.right - menu.offsetWidth + window.scrollX + "px";
+
+            // sekarang tampilkan menu
+            menu.style.visibility = "visible";
+        });
+    });
+
+    // klik di luar → tutup menu
+    document.addEventListener("click", () => {
+        document.querySelectorAll(".dropdownMenu").forEach((menu) => {
+            menu.style.display = "none";
+        });
+    });
+});

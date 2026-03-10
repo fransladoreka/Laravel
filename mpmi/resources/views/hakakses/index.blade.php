@@ -177,7 +177,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="min-height: 350px;">
                     <!-- Tombol toggle tree -->
                     <!-- <button class="btn btn-outline-secondary btn-sm" type="button"
                         data-bs-toggle="collapse"
@@ -191,7 +191,7 @@
                         Tampilkan Tree
                     </button> -->
                     <!-- <div style="overflow-x: auto;"> -->
-                    <div>
+                    <div class="card-table-container">
                         <table id="tableHakAkses" class="table">
                             <thead>
                                 <tr>
@@ -211,7 +211,20 @@
                                         <div class="d-flex align-items-center gap-1">
                                             <button type="button" class="btn btn-sm btn-outline-primary btn-circle btn-icon"
                                                 onclick="showPermission('{{ $role->id }}')"><i class="fas fa-arrow-right"></i></button>
-                                            <div class="dropdown dropdown-inline">
+                                            <div class="dropdown">
+                                                <button class="dropdownBtn btn btn-sm btn-outline-info btn-circle btn-icon" type="button">
+                                                    <i class="fa fa-cog"></i>
+                                                </button>
+                                                <div class="dropdownMenu dropdown-menu">
+                                                    <a class="dropdown-item" href="javascript:;" onclick="editData('{{ $role->id }}')">
+                                                        <i class="fa fa-pen"></i> Ubah
+                                                    </a>
+                                                    <a class="dropdown-item text-danger" href="javascript:;" onclick="onDelete('{{ $role->id }}')">
+                                                        <i class="fa fa-trash"></i> Hapus
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="dropdown dropdown-inline">
                                                 <a href="javascript:;"
                                                     class="btn btn-sm btn-outline-info btn-circle btn-icon"
                                                     data-bs-toggle="dropdown"
@@ -244,7 +257,7 @@
                                                         </li>
                                                     </ul>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </td>
                                 </tr>
@@ -283,6 +296,7 @@
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
 <script src="{{ asset('js/custom.js') }}"></script>
 <!-- <script>
     $('#tree').jstree({
