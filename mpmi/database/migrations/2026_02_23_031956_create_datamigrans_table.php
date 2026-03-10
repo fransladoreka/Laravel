@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('datamigrans', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->timestamps();
             $table->string('nama');
             $table->string('nik');
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('provinsi');
             $table->boolean('ex_taiwan');
             $table->string('jenis_paket');
-            $table->foreignId('paket_kerja')
+            $table->foreignUlid('paket_kerja')
                 ->constrained('paket_kerjas')
                 ->cascadeOnDelete();
             $table->boolean('glasses');

@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('dokumens', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('datamigran_id')->constrained()->onDelete('cascade');
+            $table->ulid('id')->primary();
+            $table->foreignUlid('datamigran_id')->constrained()->onDelete('cascade');
             $table->string('jenis');
             $table->string('file_path');
             $table->timestamps();

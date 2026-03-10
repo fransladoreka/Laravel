@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('akun_akuntansis', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->string('kode');
             $table->string('akun');
-            $table->integer('id_parent')->nullable();
+            $table->ulid('id_parent')->nullable();
             $table->timestamps();
         });
     }
