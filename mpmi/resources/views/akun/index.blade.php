@@ -463,7 +463,7 @@
                                             title: "Berhasil!",
                                             text: "Akun berhasil dihapus",
                                             timer: 1500,
-                                            showCnfirmButton: false
+                                            showConfirmButton: false
                                         });
                                         reloadTree();
                                         rightPanel.innerHTML = "<div class='p-4 text-muted text-center'>Pilih menu edit/tambah untuk menampilkan form</div>";

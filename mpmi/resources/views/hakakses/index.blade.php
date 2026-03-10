@@ -190,63 +190,68 @@
                         id="treeToggleBtn">
                         Tampilkan Tree
                     </button> -->
-                    <table id="tableHakAkses" class="table">
-                        <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>Kode</th>
-                                <th>Nama</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($roles as $key => $role)
-                            <tr>
-                                <td>{{ $key+1 }}</td>
-                                <td>{{ $role->kode }}</td>
-                                <td>{{ $role->name }}</td>
-                                <td class="d-flex align-items-center gap-1">
-                                    <button type="button" class="btn btn-sm btn-outline-primary btn-circle btn-icon"
-                                        onclick="showPermission('{{ $role->id }}')"><i class="fas fa-arrow-right"></i></button>
-                                    <div class="dropdown dropdown-inline">
-                                        <a href="javascript:;"
-                                            class="btn btn-sm btn-outline-info btn-circle btn-icon"
-                                            data-bs-toggle="dropdown"
-                                            aria-expanded="false">
-                                            <i class="fa fa-cog"></i>
-                                        </a>
+                    <!-- <div style="overflow-x: auto;"> -->
+                    <div>
+                        <table id="tableHakAkses" class="table">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Kode</th>
+                                    <th>Nama</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($roles as $key => $role)
+                                <tr>
+                                    <td>{{ $key+1 }}</td>
+                                    <td>{{ $role->kode }}</td>
+                                    <td>{{ $role->name }}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <button type="button" class="btn btn-sm btn-outline-primary btn-circle btn-icon"
+                                                onclick="showPermission('{{ $role->id }}')"><i class="fas fa-arrow-right"></i></button>
+                                            <div class="dropdown dropdown-inline">
+                                                <a href="javascript:;"
+                                                    class="btn btn-sm btn-outline-info btn-circle btn-icon"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                    <i class="fa fa-cog"></i>
+                                                </a>
 
-                                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-sm">
-                                            <ul class="nav nav-hoverable flex-column">
-                                                <li class="nav-item">
-                                                    <a class="nav-link text-hover-warning"
-                                                        href="javascript:;"
-                                                        data-bs-toggle="tooltip"
-                                                        title="Lihat Menu Data"
-                                                        onclick="onEdit('{{ $role->id }}')">
+                                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-sm">
+                                                    <ul class="nav nav-hoverable flex-column">
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-hover-warning"
+                                                                href="javascript:;"
+                                                                data-bs-toggle="tooltip"
+                                                                title="Lihat Menu Data"
+                                                                onclick="editData('{{ $role->id }}')">
 
-                                                        <i class="nav-icon fa fa-pen"></i>
-                                                        <span class="nav-text text-hover-warning">Ubah</span>
-                                                    </a>
-                                                </li>
+                                                                <i class="nav-icon fa fa-pen"></i>
+                                                                <span class="nav-text text-hover-warning">Ubah</span>
+                                                            </a>
+                                                        </li>
 
-                                                <li class="nav-item">
-                                                    <a class="nav-link text-hover-danger"
-                                                        href="javascript:;"
-                                                        onclick="onDelete('{{ $role->id }}')">
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-hover-danger"
+                                                                href="javascript:;"
+                                                                onclick="onDelete('{{ $role->id }}')">
 
-                                                        <i class="nav-icon fa fa-trash"></i>
-                                                        <span class="nav-text text-hover-danger">Hapus</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
+                                                                <i class="nav-icon fa fa-trash"></i>
+                                                                <span class="nav-text text-hover-danger">Hapus</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -257,6 +262,14 @@
                     <div class="d-flex align-items-center gap-2">
                         <i class="fas fa-clipboard-list text-primary"></i>
                         <h4 class="mb-0">Menu Data</h4>
+                    </div>
+                    <!-- Bagian kanan: Tombol -->
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-primary btn-sm" onclick="SimpanPermission()"
+                            id="tombolSimpanPermission" style="display: none; position: relative;">
+                            <span class="btn-text"><i class="fas fa-save"></i> Simpan</span>
+                            <span class="btn-spinner"></span>
+                        </button>
                     </div>
                 </div>
                 <!-- Collapse container -->

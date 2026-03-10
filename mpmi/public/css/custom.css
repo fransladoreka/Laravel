@@ -3,8 +3,89 @@
     border-top: none !important;
     border-left: none !important;
     border-right: none !important;
+    color: #212529;
 }
 
 #tableHakAkses tbody tr {
     border-bottom: 1px solid #dee2e6;
+}
+
+/* Terapkan border bawah seperti row normal */
+#tableHakAkses tbody tr.datatable-empty td {
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: 1px solid #dee2e6;
+    /* sama seperti row normal */
+    height: 50px;
+    /* optional, agar tinggi row seragam */
+    line-height: 50px;
+    /* vertikal center */
+    text-align: left;
+    /* rata kiri sama seperti data */
+    font-style: normal;
+    /* hilangkan italic jika mau */
+    color: #212529;
+    /* sama seperti teks normal */
+    background-color: #fff;
+    /* sama dengan row normal */
+}
+
+/* Tombol berbentuk lingkaran */
+.btn-circle {
+    border-radius: 50% !important;
+    /* bikin lingkaran sempurna */
+    width: 32px;
+    /* ukuran lingkaran */
+    height: 32px;
+    padding: 0;
+    /* hilangkan padding default */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Jika tombol lebih kecil (btn-sm), bisa 28px */
+.btn-sm.btn-circle {
+    width: 28px;
+    height: 28px;
+}
+
+/* Optional: hover dan fokus */
+.btn-circle:hover {
+    text-decoration: none;
+    transform: scale(1.1);
+    transition: transform 0.1s ease-in-out;
+}
+
+.btn-circle i {
+    font-size: 0.9rem;
+    /* icon proporsional dengan tombol */
+}
+
+/* Spinner di tombol */
+#tombolSimpanPermission .btn-spinner {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    /* lebih kecil untuk btn-sm */
+    height: 12px;
+    border: 2px solid #fff;
+    border-top: 2px solid #007bff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    /* sedikit lebih cepat */
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }

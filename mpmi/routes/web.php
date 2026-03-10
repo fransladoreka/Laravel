@@ -29,6 +29,8 @@ Route::resource('datamigran', DatamigranController::class);
 Route::get('/datamigran/{id}/pdf', [DatamigranController::class, 'cetakPdf'])
     ->name('datamigran.pdf');
 Route::resource('paketkerja', PaketKerjaController::class);
-Route::get('/hakakses/permission', [HakAkses::class, 'permission'])
+Route::get('/hakakses/{id}/permission', [HakAkses::class, 'permission'])
     ->name('hakakses.permision');
+Route::post('/hakakses/{id}/simpanpermission', [HakAkses::class, 'simpanpermission'])
+    ->name('hakakses.simpanpermission');
 Route::resource('hakakses', HakAkses::class);
