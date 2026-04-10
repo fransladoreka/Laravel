@@ -4,8 +4,10 @@
 <style>
 </style>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default/style.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/jstree.min.js"></script>
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default/style.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/jstree.min.js"></script> -->
+<link rel="stylesheet" href="{{ asset('plugin/jstree/themes/default/style.min.css') }}">
+<script src="{{ asset('plugin/jstree/jstree.min.js') }}"></script>
 @endpush
 <style>
     .jstree-default .jstree-anchor {

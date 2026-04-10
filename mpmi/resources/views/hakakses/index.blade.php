@@ -160,7 +160,7 @@
     <div class="row table_data">
         <div class="col-12 col-md-5 mb-3">
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="card-header d-flex justify-content-between align-items-center" >
                     <!-- Bagian kiri: Icon + Judul -->
                     <div class="d-flex align-items-center gap-2">
                         <i class="fas fa-table text-primary"></i>
